@@ -58,6 +58,7 @@ const loginSchema = Joi.object({
     } catch (error) {
       res.status(500).json({ error: 'Error del servidor' });
     }
+    
   };
 
 

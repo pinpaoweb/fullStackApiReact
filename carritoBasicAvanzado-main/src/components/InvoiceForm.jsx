@@ -55,6 +55,7 @@ const InvoiceForm = ({ cartItems }) => {
         </div>
         <div>
           <label>Dirección de residencia</label>
+          
           <input type="text" name="address" value={formData.address} onChange={handleChange} required />
         </div>
         <div>

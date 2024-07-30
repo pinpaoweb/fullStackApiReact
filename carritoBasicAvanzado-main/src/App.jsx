@@ -134,8 +134,7 @@ const App = () => {
         <Route path="/manage-orders" element={<PrivateRoute><ManageOrders /></PrivateRoute>} /> {/* Ruta para gestionar pedidos */}
         <Route path="/update-user" element={<UpdateUser />} /> {/* Nueva ruta para actualizar el usuario */}
 
-        
-      </Routes>
+              </Routes>
 
       {showCartMenu && (
         <CartMenu
