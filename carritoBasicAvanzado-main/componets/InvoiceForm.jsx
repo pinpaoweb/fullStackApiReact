@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Importar axios
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const InvoiceForm = ({ cartItems }) => {
   const [formData, setFormData] = useState({ name: '', email: '', address: '', barrio: '', municipio: '', departamento: '' });
@@ -32,7 +32,7 @@ const InvoiceForm = ({ cartItems }) => {
     };
 
     console.log(pedido); // Añadir esta línea para verificar el objeto pedido
-    
+
     try {
       await axios.post('http://localhost:5000/api/pedidos/nuevo', pedido);
       navigate('/invoice-pdf', { state: { ...formData, cartItems, paymentCode } });
@@ -50,8 +50,8 @@ const InvoiceForm = ({ cartItems }) => {
           <input type="text" name="name" value={formData.name} onChange={handleChange} required />
         </div>
         <div>
-          <label>Email</label>
-          <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+          <label>Email o Tel</label>
+          <input type="text" name="email" value={formData.email} onChange={handleChange} required />
         </div>
         <div>
           <label>Dirección de residencia</label>
