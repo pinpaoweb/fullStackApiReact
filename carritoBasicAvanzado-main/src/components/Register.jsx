@@ -22,7 +22,9 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/auth/register', formData);
+      await axios.post('http://localhost:5000/api/auth/register', formData, {
+        withCredentials: true // Asegúrate de incluir cookies en solicitudes cruzadas
+      });
       setMessage('Registro exitoso');
       localStorage.setItem('username', formData.username);
       window.dispatchEvent(new Event('storage')); // Disparar evento de almacenamiento
@@ -34,26 +36,46 @@ const Register = () => {
 
   return (
     <div className="payment-form">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} autoComplete="off">
         <h2>Register</h2>
         {message && <p>{message}</p>}
-        <label>
+        <label htmlFor="username">
           Username:
-          <input type="text" name="username" value={formData.username} onChange={handleChange} />
+          <input
+            type="text"
+            id="username"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            autoComplete="username"
+          />
         </label>
-        <label>
+        <label htmlFor="email">
           Email:
-          <input type="email" name="email" value={formData.email} onChange={handleChange} />
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            autoComplete="email"
+          />
         </label>
-        <label>
+        <label htmlFor="password">
           Password:
-          <input type="password" name="password" value={formData.password} onChange={handleChange} />
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            autoComplete="new-password"
+          />
         </label>
         <button type="submit">Register</button>
       </form>
     </div>
   );
 };
-
 
 export default Register;

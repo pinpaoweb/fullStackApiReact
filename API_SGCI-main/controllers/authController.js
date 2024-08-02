@@ -32,67 +32,67 @@ exports.register = async (req, res) => {
   }
 };
 
-
-
 const loginSchema = Joi.object({
-    email: Joi.string().email().required(),
-    password: Joi.string().min(6).required()
-  });
-  
-  exports.login = async (req, res) => {
-    const { error } = loginSchema.validate(req.body);
-    if (error) return res.status(400).json({ error: error.details[0].message });
-  
-    const { email, password } = req.body;
-  
-    try {
-      const user = await User.findOne({ email });
-      if (!user) return res.status(400).json({ error: 'Credenciales inválidas' });
-  
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) return res.status(400).json({ error: 'Credenciales inválidas' });
-  
-      const token = jwt.sign({ userId: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
-  
-      res.status(200).json({ mensaje: 'Inicio de sesión exitoso', token, username: user.username, role: user.role, userId: user._id, email: user.email });
-    } catch (error) {
-      res.status(500).json({ error: 'Error del servidor' });
-    }
-    
-  };
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required()
+});
 
+exports.login = async (req, res) => {
+  const { error } = loginSchema.validate(req.body);
+  if (error) return res.status(400).json({ error: error.details[0].message });
 
-  const updateUserSchema = Joi.object({
-    username: Joi.string().min(3).max(50),
-    email: Joi.string().email(),
-    password: Joi.string().min(6)
-  });
+  const { email, password } = req.body;
 
-  exports.updateUser = async (req, res) => {
-    const { error } = updateUserSchema.validate(req.body);
-    if (error) return res.status(400).json({ error: error.details[0].message });
-  
-    const updates = req.body;
-  
-    try {
-      
-      // Validar si el nuevo email ya está en uso
-      if (updates.email) {
-        const existingUser = await User.findOne({ email: updates.email });
-        if (existingUser && existingUser._id.toString() !== req.user.userId) {
-          return res.status(400).json({ error: 'El email ya está en uso, usar otro' }); // Línea agregada
-        }
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ error: 'Credenciales inválidas' });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ error: 'Credenciales inválidas' });
+
+    const token = jwt.sign({ userId: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
+
+    res.cookie('authToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'None'
+    });
+
+    res.status(200).json({ mensaje: 'Inicio de sesión exitoso', token, username: user.username, role: user.role, userId: user._id, email: user.email });
+  } catch (error) {
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+};
+
+const updateUserSchema = Joi.object({
+  username: Joi.string().min(3).max(50),
+  email: Joi.string().email(),
+  password: Joi.string().min(6)
+});
+
+exports.updateUser = async (req, res) => {
+  const { error } = updateUserSchema.validate(req.body);
+  if (error) return res.status(400).json({ error: error.details[0].message });
+
+  const updates = req.body;
+
+  try {
+    if (updates.email) {
+      const existingUser = await User.findOne({ email: updates.email });
+      if (existingUser && existingUser._id.toString() !== req.user.userId) {
+        return res.status(400).json({ error: 'El email ya está en uso, usar otro' });
       }
-
-      if (updates.password) {
-        updates.password = await bcrypt.hash(updates.password, 10);
-      }
-  
-      const user = await User.findByIdAndUpdate(req.user.userId, updates, { new: true });
-      if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
-  
-      res.status(200).json({ mensaje: 'Datos del usuario actualizados exitosamente', user });
-    } catch (error) {
-      res.status(500).json({ error: 'Error del servidor' });
     }
-  };
+
+    if (updates.password) {
+      updates.password = await bcrypt.hash(updates.password, 10);
+    }
+
+    const user = await User.findByIdAndUpdate(req.user.userId, updates, { new: true });
+    if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+
+    res.status(200).json({ mensaje: 'Datos del usuario actualizados exitosamente', user });
+  } catch (error) {
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+};

@@ -8,5 +8,11 @@
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "express-validator": "^7.1.0",
+    "prop-types": "^15.8.1",
+    "react-lazyload": "^3.2.1"
+  }
 }

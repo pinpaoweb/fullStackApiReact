@@ -12,7 +12,7 @@ import Register from './components/Register';
 import Login from './components/Login';
 import ManageProducts from './components/ManageProducts';
 import Pedidos from './components/Pedidos';
-import ManageOrders from './components/Orders/ManageOrders'; // Importar componente de gestión de pedidos
+import ManageOrders from './components/ManageOrders'; // Importar componente de gestión de pedidos
 import UpdateUser from './components/UpdateUser'; // Importar el componente de actualización de usuario
 
 const initialProducts = [];
@@ -40,10 +40,9 @@ const App = () => {
   const location = useLocation(); // Usar useLocation para rastrear la ubicación
 
   useEffect(() => {
-    
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/productos');
+        const response = await axios.get('http://localhost:5000/api/productos', { withCredentials: true });
         console.log('Productos desde la API:', response.data);
         // Mapeamos los productos antes de establecerlos en el estado
         const mappedProducts = response.data.map(mapProductData);
@@ -52,13 +51,13 @@ const App = () => {
         console.error('Error al obtener los productos', error);
       }
     };
-
+  
+    // Ejecuta la función solo cuando la ruta es '/'
     if (location.pathname === '/') {
       fetchProducts();
     }
   }, [location.pathname]);
-
-
+  
   const handleAddToCart = (product, quantity) => {
     const existingItem = cartItems.find(item => item.product.id === product.id);
     if (existingItem) {
@@ -134,7 +133,8 @@ const App = () => {
         <Route path="/manage-orders" element={<PrivateRoute><ManageOrders /></PrivateRoute>} /> {/* Ruta para gestionar pedidos */}
         <Route path="/update-user" element={<UpdateUser />} /> {/* Nueva ruta para actualizar el usuario */}
 
-              </Routes>
+        
+      </Routes>
 
       {showCartMenu && (
         <CartMenu
@@ -149,5 +149,6 @@ const App = () => {
     </div>
   );
 };
+
 
 export default App;

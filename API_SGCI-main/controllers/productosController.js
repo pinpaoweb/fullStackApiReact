@@ -3,6 +3,13 @@ const multer = require('multer');
 const shortid = require('shortid');
 const path = require('path'); // Asegúrate de importar 'path'
 
+// controllers/productosController.js
+
+//const Producto = require('../models/Producto'); // Asegúrate de que la ruta al modelo sea correcta
+
+
+
+
 const configuracionMulter = {
     storage: multer.diskStorage({
         destination: (req, file, cb) => {
@@ -28,9 +35,11 @@ const upload = multer(configuracionMulter).single('imagen');
 exports.subirArchivo = (req, res, next) => {
     upload(req, res, function (error) {
         if (error) {
-            res.json({ mensaje: error.message });
+            //res.json({ mensaje: error.message });
+            return res.status(400).json({ mensaje: error.message });
         }
-        return next();
+       //return next();
+       next();
     });
 };
 
@@ -76,26 +85,37 @@ exports.mostrarProducto = async (req, res, next) => {
 };
 
 
-
 exports.actualizarProducto = async (req, res, next) => {
     try {
-        let nuevoProducto = req.body;
+        const { idProducto } = req.params;
+        const nuevoProducto = req.body;
+
+        if (!nuevoProducto.nombre || !nuevoProducto.precio) {
+            return res.status(400).json({ error: 'Nombre y precio del producto son requeridos' });
+        }
 
         if (req.file) {
             nuevoProducto.imagen = req.file.filename;
         } else {
-            let productoAnterior = await Producto.findById(req.params.idProducto);
+            const productoAnterior = await Producto.findById(idProducto);
+            if (!productoAnterior) {
+                return res.status(404).json({ error: 'Producto no encontrado' });
+            }
             nuevoProducto.imagen = productoAnterior.imagen;
         }
 
-        let producto = await Producto.findOneAndUpdate({ _id: req.params.idProducto }, nuevoProducto, {
+        const producto = await Producto.findByIdAndUpdate(idProducto, nuevoProducto, {
             new: true
         });
 
+        if (!producto) {
+            return res.status(404).json({ error: 'Producto no encontrado' });
+        }
+
         res.json(producto);
     } catch (error) {
-        console.log(error);
-        next();
+        console.error('Error al actualizar el producto:', error);
+        res.status(500).json({ error: 'Error al actualizar el producto' });
     }
 };
 
@@ -118,4 +138,14 @@ exports.buscarProducto = async (req, res, next) => {
         console.log(error);
         next();
     }
+
 };
+// En productosController.js
+exports.getAllProducts = async (req, res) => {
+    try {
+      const productos = await Producto.find(); // Asegúrate de que esta línea sea correcta
+      res.json(productos);
+    } catch (error) {
+      res.status(500).json({ error: 'Error al obtener los productos' });
+    }
+  };

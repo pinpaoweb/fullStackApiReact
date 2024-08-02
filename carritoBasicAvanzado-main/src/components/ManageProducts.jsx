@@ -1,82 +1,126 @@
-import  { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import ModalOrders from './ModalOrders.jsx';
+import ProductModal from './ProductModal';
+import LazyLoad from 'react-lazyload';
 
-// Define el componente ManageOrders
-const ManageOrders = () => {
-  // Declara los estados del componente
-  const [orders, setOrders] = useState([]); // Estado para almacenar todos los pedidos
-  const [filteredOrders, setFilteredOrders] = useState([]); // Estado para almacenar los pedidos filtrados
-  const [searchTerm, setSearchTerm] = useState(''); // Estado para almacenar el término de búsqueda
-  const [selectedOrder, setSelectedOrder] = useState(null); // Estado para almacenar el pedido seleccionado
+const ManageProducts = () => {
+  const [products, setProducts] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [productToEdit, setProductToEdit] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
-  // useEffect para obtener los pedidos al montar el componente
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        // Realiza una solicitud GET a la API para obtener los pedidos
-        const response = await axios.get('http://localhost:5000/api/pedidos');
-        // Ordena los pedidos por fecha de creación en orden descendente
-        const sortedOrders = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        setOrders(sortedOrders); // Actualiza el estado de los pedidos
-        setFilteredOrders(sortedOrders); // Actualiza el estado de los pedidos filtrados
-      } catch (error) {
-        console.error('Error al obtener los pedidos', error); // Maneja los errores de la solicitud
-      }
-    };
-
-    fetchOrders(); // Llama a la función para obtener los pedidos
-  }, []); // Dependencia vacía para ejecutar el efecto solo una vez
-
-  // Maneja la búsqueda de pedidos
-  const handleSearch = (event) => {
-    const term = event.target.value.toLowerCase(); // Obtiene el término de búsqueda en minúsculas
-    setSearchTerm(term); // Actualiza el estado del término de búsqueda
-    // Filtra los pedidos según el nombre del cliente o el estado
-    const filtered = orders.filter(order => 
-      order.cliente.username.toLowerCase().includes(term) || 
-      order.estado.toLowerCase().includes(term)
-    );
-    setFilteredOrders(filtered); // Actualiza el estado de los pedidos filtrados
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/productos');
+      setProducts(response.data);
+    } catch (error) {
+      setErrorMessage('Error al obtener los productos');
+    }
   };
 
-  // Renderiza el componente
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const handleDeleteProduct = async (id) => {
+    try {
+      const response = await axios.delete(`http://localhost:5000/api/productos/${id}`);
+      fetchProducts();
+      setSuccessMessage(response.data.mensaje || 'Producto eliminado con éxito');
+      setTimeout(() => setSuccessMessage(''), 1000);
+    } catch (error) {
+      setErrorMessage('Error al eliminar el producto');
+    }
+  };
+
+  const handleEditProduct = (product) => {
+    setProductToEdit(product);
+    setShowModal(true);
+  };
+
+  const handleAddProduct = () => {
+    setProductToEdit(null);
+    setShowModal(true);
+  };
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(`http://localhost:5000/api/productos/busqueda/${searchQuery}`);
+      setProducts(response.data);
+      if (response.data.length === 0) {
+        setErrorMessage('No se encontraron productos');
+      }
+    } catch (error) {
+      setErrorMessage('Error al buscar productos');
+    }
+  };
+
   return (
-    <div className="gestionar-pedidos-contenedor">
-      <h2>Gestionar Pedidos</h2>
-      {/* Campo de entrada para buscar pedidos */}
-      <input
-        type="text"
-        placeholder="Buscar por nombre de cliente o estado"
-        value={searchTerm}
-        onChange={handleSearch}
-        className="buscar-input"
-      />
-      <div className="pedidos-lista">
-        {/* Mapea los pedidos filtrados para mostrarlos */}
-        {filteredOrders.map(order => (
-          <div key={order._id} className={`pedido-tarjeta`} onClick={() => setSelectedOrder(order)}>
-            <p><strong>ID del Pedido:</strong> {order._id}</p>
-            <p><strong>Cliente:</strong> {order.cliente.username}</p>
-            <p><strong>Estado:</strong> <span className={`estado estado-${order.estado.toLowerCase()}`}>{order.estado}</span></p>
-            <p><strong>Código de Pago:</strong> {order.paymentCode}</p>
-            <p><strong>Total:</strong> ${order.total.toFixed(2)}</p>
-          </div>
-        ))}
-      </div>
-      {/* Muestra el modal si hay un pedido seleccionado */}
-      {selectedOrder && (
-        <ModalOrders 
-          order={selectedOrder} 
-          setSelectedOrder={setSelectedOrder} 
-          setOrders={setOrders} 
-          setFilteredOrders={setFilteredOrders} 
-          orders={orders} 
-          filteredOrders={filteredOrders} 
+    <div>
+      <h2>Gestión de Productos</h2>
+      <button onClick={handleAddProduct}>Agregar Producto</button>
+      <form onSubmit={handleSearch}>
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Buscar productos..."
         />
-      )}
+        <button type="submit">Buscar</button>
+      </form>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {successMessage && <p className="success-message">{successMessage}</p>}
+      <table className="tablaProductos">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Imagen</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {products.map((product) => (
+            <tr key={product._id}>
+              <td>{product.nombre}</td>
+              <td>{product.descripcion}</td>
+              <td>${product.precio}</td>
+              <td>{product.stock}</td>
+              <td>
+  {product.imagen && (
+    <LazyLoad height={100}>
+      <img
+        src={`http://localhost:5000/uploads/${product.imagen}`}
+        alt={`Imagen de ${product.nombre}`}
+        width="100"
+        onError={(e) => {
+          e.target.src = '/images/no-image.png';
+        }}
+      />
+    </LazyLoad>
+  )}
+</td>
+              <td>
+                <button className="edit-button" onClick={() => handleEditProduct(product)}>Editar</button>
+                <button onClick={() => handleDeleteProduct(product._id)}>Eliminar</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <ProductModal
+        showModal={showModal}
+        closeModal={() => setShowModal(false)}
+        fetchProducts={fetchProducts}
+        productToEdit={productToEdit}
+      />
     </div>
   );
 };
 
-export default ManageOrders;
+export default ManageProducts;

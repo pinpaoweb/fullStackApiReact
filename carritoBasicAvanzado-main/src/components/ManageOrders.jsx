@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import ModalOrders from '../ModalOrders.jsx';
-
+import ModalOrders from './ModalOrders.jsx';
+//import ManageOrders from './ManageOrders.jsx';
 // Define el componente ManageOrders
 const ManageOrders = () => {
   // Declara los estados del componente

@@ -1,5 +1,28 @@
-import React, { useState } from 'react';
+import React, {  useEffect, useState } from 'react';
+import axios from 'axios';
+function ProductPage({ productId }) {
+  const [product, setProduct] = useState(null);
 
+  useEffect(() => {
+    axios.get(`/api/products/${productId}`)
+      .then(response => {
+        setProduct(response.data);
+      })
+      .catch(error => {
+        console.error('Error al obtener el producto:', error);
+      });
+  }, [productId]);
+
+  return (
+    <div>
+      {product ? (
+        <Product product={product} />
+      ) : (
+        <p>Cargando producto...</p>
+      )}
+    </div>
+  );
+}
 const Product = ({ product, onAddToCart }) => {
   const [quantity, setQuantity] = useState(1);
  

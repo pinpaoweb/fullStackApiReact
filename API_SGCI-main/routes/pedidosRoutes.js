@@ -3,11 +3,24 @@ const router = express.Router();
 const pedidosController = require('../controllers/pedidosController');
 
 
+router.post('/pedidos', (req, res) => {
+    // Aquí es donde se procesa la solicitud POST
+    console.log('Se ha recibido un nuevo pedido:', req.body);
+  
+    // Lógica para guardar el pedido en la base de datos, enviar un email, etc.
+    // ...
+  
+    res.json({ message: 'Pedido recibido correctamente' });
+  });
+
 // Nuevos pedidos
-router.post('/pedidos/nuevo', pedidosController.nuevoPedido);
+router.post('/pedidos/nuevo', pedidosController.create);
+//exports.nuevoPedido = (req, res) => {
+    // Lógica para crear un nuevo pedido
+  //};
 
 // Muestra todos los pedidos
-router.get('/pedidos', pedidosController.mostrarPedidos);
+router.get('/pedidos/:idPedido', pedidosController.mostrarPedidos);
 
 // Muestra un pedido por su ID
 router.get('/pedidos/:idPedido', pedidosController.mostrarPedido);

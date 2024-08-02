@@ -1,62 +1,31 @@
+// models/Pedido.js
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const pedidosSchema = new Schema({
+
+const pedidoSchema = new mongoose.Schema({
     cliente: {
-        type: Schema.ObjectId, 
-        ref: 'User',  
+        type: mongoose.Schema.Types.ObjectId, // Definido como ObjectId
+        ref: 'User', // Reemplazado con el nombre del modelo User
         required: true
     },
-    pedido: [{
-        producto: {
-            type: Schema.ObjectId,
-            ref: 'Producto',
-            required: true
-        },
-        cantidad: {
-            type: Number,
-            required: true
+    pedido: [
+        {
+            product: {
+                type: mongoose.Schema.Types.ObjectId, // Definido como ObjectId
+                ref: 'Producto' // Debe ser el nombre exacto del modelo Producto
+            },
+            quantity: Number
         }
-    }],
-    total: {
-        type: Number,
-        required: true
-    },
-    estado: {
-        type: String,
-        enum: ['PENDIENTE', 'PAGADO', 'ENVIADO'],
-        default: 'PENDIENTE'
-    },
-// Datos para el envio del producto
-    paymentCode: {
-        type: Number,
-        required: true
-    },    
-    nombreEnvio: {
-        type: String,
-        required: true
-    },
-    telefonoEnvio: {
-        type: String,
-        required: true
-    },
-    direccionEnvio: {
-        type: String,
-        required: true
-    },
-    barrioEnvio: {
-        type: String,
-        required: true
-    },
-    municipioEnvio: {
-        type: String,
-        required: true
-    },
-    departamentoEnvio: {
-        type: String,
-        required: true
-    }
-}, {
-    timestamps: true  // Para tener campos createdAt y updatedAt
+    ],
+    total: Number,
+    paymentCode: Number,
+    nombreEnvio: String,
+    telefonoEnvio: String,
+    direccionEnvio: String,
+    barrioEnvio: String,
+    municipioEnvio: String,
+    departamentoEnvio: String,
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Pedido', pedidosSchema);
+module.exports = mongoose.model('Pedido', pedidoSchema);
