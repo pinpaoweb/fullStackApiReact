@@ -1,17 +1,17 @@
-// models/Pedido.js
 const mongoose = require('mongoose');
 
+// Asegúrate de que este archivo no esté redefiniendo el modelo 'Producto'
 const pedidoSchema = new mongoose.Schema({
     cliente: {
-        type: mongoose.Schema.Types.ObjectId, // Definido como ObjectId
-        ref: 'User', // Reemplazado con el nombre del modelo User
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     pedido: [
         {
             product: {
-                type: mongoose.Schema.Types.ObjectId, // Definido como ObjectId
-                ref: 'Producto' // Debe ser el nombre exacto del modelo Producto
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Producto' // Este debe coincidir con el modelo 'Producto'
             },
             quantity: Number
         }

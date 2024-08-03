@@ -18,6 +18,17 @@ import UpdateUser from './components/UpdateUser'; // Importar el componente de a
 const initialProducts = [];
 
 const initialSalesData = [];
+const logout = async () => {
+  try {
+    await axios.post('http://localhost:5000/api/logout');
+    // Eliminar el token del almacenamiento local
+    localStorage.removeItem('token');
+    // Redirigir al usuario a la página de inicio de sesión o al inicio
+    window.location.href = '/login';
+  } catch (error) {
+    console.error('Error al cerrar sesión:', error);
+  }
+};
 
 // Función de mapeo para transformar los datos de la API
 const mapProductData = (product) => {
@@ -129,7 +140,7 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/manage-products" element={<PrivateRoute><ManageProducts /></PrivateRoute>} />
-        <Route path="/pedidos" element={<Pedidos />} /> {/* Nueva ruta para el componente Pedidos */}
+        <Route path="/pedidos" element={<Pedidos />} /> { /* Nueva ruta para el componente Pedidos */}
         <Route path="/manage-orders" element={<PrivateRoute><ManageOrders /></PrivateRoute>} /> {/* Ruta para gestionar pedidos */}
         <Route path="/update-user" element={<UpdateUser />} /> {/* Nueva ruta para actualizar el usuario */}
 

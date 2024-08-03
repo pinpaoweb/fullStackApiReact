@@ -50,7 +50,7 @@ const UpdateUser = () => {
     try {
       // Obtiene el token de autenticación del localStorage.
       const token = localStorage.getItem('token');
-      
+
       // Prepara el objeto de actualización solo con los campos modificados.
       const updatedUser = {};
       if (user.username && user.username !== localStorage.getItem('username')) {
@@ -96,7 +96,7 @@ const UpdateUser = () => {
       setTimeout(() => {
         setSuccess(null);
       }, 3000);
-      
+
     } catch (error) {
       // Maneja los errores de la petición.
       setError(error.response ? error.response.data.error : 'Error al actualizar los datos');

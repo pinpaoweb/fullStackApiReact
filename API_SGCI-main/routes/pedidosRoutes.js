@@ -14,7 +14,7 @@ router.post('/pedidos', (req, res) => {
   });
 
 // Nuevos pedidos
-router.post('/pedidos/nuevo', pedidosController.create);
+//router.post('/pedidos/nuevo', pedidosController.create);
 //exports.nuevoPedido = (req, res) => {
     // Lógica para crear un nuevo pedido
   //};

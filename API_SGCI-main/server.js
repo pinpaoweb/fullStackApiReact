@@ -10,6 +10,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 // Crear una instancia de Express
 const app = express();
+
 //const port = 5000;
 // Conectar a la base de datos
 conectarDB().catch((err) => {
@@ -27,7 +28,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.json()); // Para parsear JSON en el cuerpo de las solicitudes
 app.use('/api', pedidosRoutes);
-
+app.use(cookieParser());
 app.post('/login', (req, res) => {
     // ...
     console.log('Request headers:', req.headers); // Verifica los encabezados de la solicitud
@@ -42,6 +43,8 @@ app.use(cookieParser());
 
 // Ruta para servir archivos estáticos
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+//app.use('/uploads', express.static('path/to/uploads'));
+
 
 // Rutas
 app.use('/api/auth', authRoutes);
