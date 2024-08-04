@@ -8,7 +8,8 @@ const Pedidos = () => {
   useEffect(() => {
     const fetchPedidos = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/pedidos/cliente/${userId}`);
+        // Asegúrate de incluir las credenciales si es necesario
+        const response = await axios.get(`http://localhost:5000/api/pedidos/cliente/${userId}`, { withCredentials: true });
         const sortedPedidos = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setPedidos(sortedPedidos);
       } catch (error) {
@@ -30,14 +31,18 @@ const Pedidos = () => {
             <div className="pedido-header">
               <p><strong>ID del Pedido:</strong> {pedido._id}</p>
               <p><strong>Fecha del Pedido:</strong> {new Date(pedido.createdAt).toLocaleDateString()}</p>
-              <p><strong className={`estado ${pedido.estado ? pedido.estado.toLowerCase() : ''}`}>Estado: {pedido.estado || 'Desconocido'}</strong></p>
+              <p><strong className={`estado ${pedido.estado ? pedido.estado.toLowerCase() : 'desconocido'}`}>Estado: {pedido.estado || 'Desconocido'}</strong></p>
               <p><strong>Código de Pago:</strong> {pedido.paymentCode}</p>
             </div>
             <div className="pedido-body">
               <h3>Productos</h3>
               {pedido.pedido.map(item => (
                 <div key={item._id} className="pedido-item">
-                  <img src={item.producto?.imagen ? `http://localhost:5000/uploads/${item.producto.imagen}` : 'default-image.png'} alt={item.producto?.nombre || 'Imagen no disponible'} className="product-image" />
+                  <img 
+                    src={item.producto?.imagen ? `http://localhost:5000/uploads/${item.producto.imagen}` : 'default-image.png'} 
+                    alt={item.producto?.nombre || 'Imagen no disponible'} 
+                    className="product-image" 
+                  />
                   <div className="item-details">
                     <p><strong>Producto:</strong> {item.producto?.nombre || 'Producto eliminado'}</p>
                     <p><strong>Cantidad:</strong> {item.cantidad}</p>

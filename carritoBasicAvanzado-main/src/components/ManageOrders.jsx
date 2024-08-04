@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ModalOrders from './ModalOrders.jsx';
-//import ManageOrders from './ManageOrders.jsx';
+
 // Define el componente ManageOrders
 const ManageOrders = () => {
   // Declara los estados del componente
@@ -15,9 +15,11 @@ const ManageOrders = () => {
     const fetchOrders = async () => {
       try {
         // Realiza una solicitud GET a la API para obtener los pedidos
-        const response = await axios.get('http://localhost:5000/api/pedidos');
+        const response = await axios.get('http://localhost:5000/api/pedidos', { withCredentials: true });
         // Ordena los pedidos por fecha de creación en orden descendente
-        const sortedOrders = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        const sortedOrders = response.data
+          .filter(order => order.cliente && order.estado) // Filtra pedidos sin cliente o estado
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setOrders(sortedOrders); // Actualiza el estado de los pedidos
         setFilteredOrders(sortedOrders); // Actualiza el estado de los pedidos filtrados
       } catch (error) {
@@ -34,8 +36,8 @@ const ManageOrders = () => {
     setSearchTerm(term); // Actualiza el estado del término de búsqueda
     // Filtra los pedidos según el nombre del cliente o el estado
     const filtered = orders.filter(order => 
-      order.cliente.username.toLowerCase().includes(term) || 
-      order.estado.toLowerCase().includes(term)
+      (order.cliente && order.cliente.username.toLowerCase().includes(term)) || 
+      (order.estado && order.estado.toLowerCase().includes(term))
     );
     setFilteredOrders(filtered); // Actualiza el estado de los pedidos filtrados
   };
@@ -54,15 +56,19 @@ const ManageOrders = () => {
       />
       <div className="pedidos-lista">
         {/* Mapea los pedidos filtrados para mostrarlos */}
-        {filteredOrders.map(order => (
-          <div key={order._id} className={`pedido-tarjeta`} onClick={() => setSelectedOrder(order)}>
-            <p><strong>ID del Pedido:</strong> {order._id}</p>
-            <p><strong>Cliente:</strong> {order.cliente.username}</p>
-            <p><strong>Estado:</strong> <span className={`estado estado-${order.estado.toLowerCase()}`}>{order.estado}</span></p>
-            <p><strong>Código de Pago:</strong> {order.paymentCode}</p>
-            <p><strong>Total:</strong> ${order.total.toFixed(2)}</p>
-          </div>
-        ))}
+        {filteredOrders.length > 0 ? (
+          filteredOrders.map(order => (
+            <div key={order._id} className={`pedido-tarjeta`} onClick={() => setSelectedOrder(order)}>
+              <p><strong>ID del Pedido:</strong> {order._id}</p>
+              <p><strong>Cliente:</strong> {order.cliente ? order.cliente.username : 'Desconocido'}</p>
+              <p><strong>Estado:</strong> <span className={`estado estado-${order.estado ? order.estado.toLowerCase() : 'desconocido'}`}>{order.estado || 'Desconocido'}</span></p>
+              <p><strong>Código de Pago:</strong> {order.paymentCode}</p>
+              <p><strong>Total:</strong> ${order.total.toFixed(2)}</p>
+            </div>
+          ))
+        ) : (
+          <p>No se encontraron pedidos.</p>
+        )}
       </div>
       {/* Muestra el modal si hay un pedido seleccionado */}
       {selectedOrder && (

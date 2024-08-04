@@ -2,37 +2,23 @@ const express = require('express');
 const router = express.Router();
 const pedidosController = require('../controllers/pedidosController');
 
+// Crear un nuevo pedido
+router.post('/pedidos/nuevo', pedidosController.create);
 
-router.post('/pedidos', (req, res) => {
-    // Aquí es donde se procesa la solicitud POST
-    console.log('Se ha recibido un nuevo pedido:', req.body);
-  
-    // Lógica para guardar el pedido en la base de datos, enviar un email, etc.
-    // ...
-  
-    res.json({ message: 'Pedido recibido correctamente' });
-  });
+// Mostrar todos los pedidos
+router.get('/pedidos', pedidosController.mostrarPedidos);
 
-// Nuevos pedidos
-//router.post('/pedidos/nuevo', pedidosController.create);
-//exports.nuevoPedido = (req, res) => {
-    // Lógica para crear un nuevo pedido
-  //};
-
-// Muestra todos los pedidos
-router.get('/pedidos/:idPedido', pedidosController.mostrarPedidos);
-
-// Muestra un pedido por su ID
+// Mostrar un pedido por su ID
 router.get('/pedidos/:idPedido', pedidosController.mostrarPedido);
 
-
-// Actualizar pedidos
+// Actualizar un pedido por su ID
 router.put('/pedidos/:idPedido', pedidosController.actualizarPedido);
 
-// Elimina un pedido
+// Eliminar un pedido por su ID
 router.delete('/pedidos/:idPedido', pedidosController.eliminarPedido);
 
-// Muestra todos los pedidos del cliente por su ID
+// Mostrar todos los pedidos de un cliente específico
 router.get('/pedidos/cliente/:idCliente', pedidosController.mostrarPedidosCliente);
+
 
 module.exports = router;

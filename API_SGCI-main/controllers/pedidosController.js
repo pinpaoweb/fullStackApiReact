@@ -22,12 +22,15 @@ exports.mostrarPedidos = async (req, res, next) => {
             .populate('cliente', '-password') // Poblar el campo cliente sin la contraseña
             .populate({
                 path: 'pedido.product', // Ruta para poblar los productos dentro del pedido
-                select: 'nombre imagen' // Asegúrate de seleccionar los campos necesarios del producto
+                populate: {
+                    path: 'product', // El campo 'product' en 'pedido' debe coincidir con el esquema de Producto
+                    select: 'nombre imagen' // Asegúrate de seleccionar los campos necesarios del producto
+                }
             });
         res.json(pedidos);
     } catch (error) {
         console.log(error);
-        next();
+        next(error); // Pasar el error al siguiente middleware
     }
 };
 
@@ -43,16 +46,19 @@ exports.mostrarPedido = async (req, res, next) => {
             .populate('cliente', '-password') // Poblar el campo cliente sin la contraseña
             .populate({
                 path: 'pedido.product', // Ruta para poblar los productos dentro del pedido
-                select: 'nombre imagen' // Asegúrate de seleccionar los campos necesarios del producto
+                populate: {
+                    path: 'product', // El campo 'product' en 'pedido' debe coincidir con el esquema de Producto
+                    select: 'nombre imagen' // Asegúrate de seleccionar los campos necesarios del producto
+                }
             });
-        
+
         if (!pedido) {
             return res.status(404).json({ mensaje: 'Ese pedido no existe' });
         }
         res.json(pedido);
     } catch (error) {
         console.log(error);
-        next();
+        next(error); // Pasar el error al siguiente middleware
     }
 };
 
@@ -67,13 +73,16 @@ exports.actualizarPedido = async (req, res, next) => {
         .populate('cliente', '-password') // Poblar el campo cliente sin la contraseña
         .populate({
             path: 'pedido.product', // Ruta para poblar los productos dentro del pedido
-            select: 'nombre imagen' // Asegúrate de seleccionar los campos necesarios del producto
+            populate: {
+                path: 'product', // El campo 'product' en 'pedido' debe coincidir con el esquema de Producto
+                select: 'nombre imagen' // Asegúrate de seleccionar los campos necesarios del producto
+            }
         });
 
         res.json(pedido);
     } catch (error) {
         console.log(error);
-        next();
+        next(error); // Pasar el error al siguiente middleware
     }
 };
 
@@ -84,7 +93,7 @@ exports.eliminarPedido = async (req, res, next) => {
         res.json({ mensaje: 'El pedido se ha eliminado' });
     } catch (error) {
         console.log(error);
-        next();
+        next(error); // Pasar el error al siguiente middleware
     }
 };
 
@@ -95,11 +104,14 @@ exports.mostrarPedidosCliente = async (req, res, next) => {
             .populate('cliente', '-password') // Poblar el campo cliente sin la contraseña
             .populate({
                 path: 'pedido.product', // Ruta para poblar los productos dentro del pedido
-                select: 'nombre imagen' // Asegúrate de seleccionar los campos necesarios del producto
+                populate: {
+                    path: 'product', // El campo 'product' en 'pedido' debe coincidir con el esquema de Producto
+                    select: 'nombre imagen' // Asegúrate de seleccionar los campos necesarios del producto
+                }
             });
         res.json(pedidos);
     } catch (error) {
         console.log(error);
-        next();
+        next(error); // Pasar el error al siguiente middleware
     }
 };
