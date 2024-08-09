@@ -24,10 +24,10 @@ const InvoicePDF = () => {
     doc.setFontSize(11);
     doc.setTextColor(100);
     doc.setFont('helvetica', 'normal');
-    doc.text('Nombre de la Empresa', 105, 30, null, null, 'center');
-    doc.text('Dirección de la Empresa', 105, 35, null, null, 'center');
-    doc.text('Teléfono: 123-456-7890', 105, 40, null, null, 'center');
-    doc.text('Correo: empresa@correo.com', 105, 45, null, null, 'center');
+    doc.text('pinpao', 105, 30, null, null, 'center');
+    doc.text('calle 6 2-40', 105, 35, null, null, 'center');
+    doc.text('Teléfono: 3012802459', 105, 40, null, null, 'center');
+    doc.text('Correo: info@pinpao', 105, 45, null, null, 'center');
 
     // Información del cliente
     doc.setFontSize(12);

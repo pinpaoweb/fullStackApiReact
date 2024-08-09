@@ -53,7 +53,7 @@ const ManageProducts = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:5000/api/productos/busqueda/${searchQuery}`);
+      const response = await axios.get(`http://localhost:5000/api/productos/busqueda/${searchQuery}`);
       setProducts(response.data);
       if (response.data.length === 0) {
         setErrorMessage('No se encontraron productos');
