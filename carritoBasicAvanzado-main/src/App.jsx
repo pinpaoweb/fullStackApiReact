@@ -37,6 +37,7 @@ const mapProductData = (product) => {
   };
 };
 
+
 const App = () => {
   const [products, setProducts] = useState(initialProducts);
   const [salesData] = useState(initialSalesData);

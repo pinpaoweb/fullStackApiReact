@@ -6,10 +6,11 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
-  
-  "dependencies": { 
+  "dependencies": {
     "cookie-parser": "^1.4.6",
     "@formkit/auto-animate": "^0.8.2",
     "axios": "^1.7.2",
@@ -34,4 +35,5 @@
     "eslint-plugin-react-refresh": "^0.4.6",
     "vite": "^5.2.0"
   }
+
 }

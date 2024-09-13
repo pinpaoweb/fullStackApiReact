@@ -1,0 +1,21 @@
+Descripción
+Impactos Ambientales en el Desarrollo de Software
+Residuos Electrónicos:
+
+Descripción: Los residuos electrónicos, como componentes de computadoras y servidores obsoletos, representan un desafío ambiental significativo debido a su potencial para liberar sustancias tóxicas y su dificultad de reciclaje.
+Impacto: Contaminación del suelo y del agua, riesgos para la salud humana y pérdida de recursos valiosos.
+Consumo de Energía:
+
+Descripción: El consumo de energía en el desarrollo de software proviene de servidores, equipos de oficina y centros de datos que operan continuamente.
+Impacto: Emisiones de gases de efecto invernadero, aumento en la demanda de recursos energéticos y costos operativos elevados.
+Estrategias de Control
+Reciclaje de Residuos Electrónicos:
+
+Descripción: Implementar programas para la recolección y reciclaje de equipos electrónicos obsoletos, asegurando que se manejen de manera segura y que los materiales se reutilicen o se eliminen correctamente.
+Beneficios: Reducción de la contaminación, conservación de recursos y cumplimiento de regulaciones ambientales.
+Uso de Tecnologías Eficientes en Energía:
+
+Descripción: Adoptar tecnologías y equipos que optimicen el consumo energético, como servidores con certificaciones de eficiencia energética, y utilizar fuentes de energía renovable siempre que sea posible.
+Beneficios: Disminución del consumo de energía, reducción de emisiones de gases de efecto invernadero y ahorro en costos energéticos.
+Tipos Comunes: Lesiones relacionadas con equipos y trastornos musculoesqueléticos.
+Estrategias de Control: Implementación de equipos de protección personal y prácticas ergonómicas.
