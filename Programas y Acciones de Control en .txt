@@ -1,0 +1,25 @@
+Programas y Acciones de Control en SST
+Programas
+Prevención de Riesgos Laborales:
+
+Descripción: Implementar programas diseñados para identificar, evaluar y minimizar los riesgos laborales presentes en el entorno de trabajo.
+Objetivo: Prevenir la ocurrencia de accidentes y enfermedades laborales mediante la mejora continua de los procesos y el fortalecimiento de la cultura de seguridad.
+Control de Enfermedades Profesionales:
+
+Descripción: Desarrollar programas específicos para la identificación y control de enfermedades relacionadas con el trabajo, asegurando que los trabajadores reciban los cuidados y tratamientos adecuados.
+Objetivo: Reducir la incidencia de enfermedades profesionales y promover un entorno laboral saludable.
+Acciones de Control
+Evaluación de Riesgos:
+
+Descripción: Realizar evaluaciones periódicas de riesgos para identificar peligros potenciales y evaluar su impacto en la salud y seguridad laboral.
+Objetivo: Implementar medidas preventivas para mitigar los riesgos identificados y reducir la probabilidad de accidentes y enfermedades.
+Procedimientos de Emergencia:
+
+Descripción: Establecer y mantener procedimientos de emergencia claros y efectivos para responder adecuadamente a situaciones de riesgo y emergencias.
+Objetivo: Asegurar una respuesta rápida y efectiva en caso de incidentes, minimizando el impacto en la salud y la seguridad de los trabajadores.
+Formación Continua:
+
+Descripción: Proporcionar formación continua a los empleados sobre prácticas de seguridad, procedimientos de emergencia y prevención de riesgos.
+Objetivo: Asegurar que todos los trabajadores estén bien informados y capacitados para manejar los riesgos laborales y responder adecuadamente a situaciones de emergencia.
+Programas: Prevención de riesgos laborales y control de enfermedades profesionales.
+Acciones de Control: Evaluación de riesgos, procedimientos de emergencia y formación continua.

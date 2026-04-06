@@ -1,0 +1,23 @@
+{
+  "name": "fullstackapireact",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "express-validator": "^7.1.0",
+    "glob": "^11.0.0",
+    "prop-types": "^15.8.1",
+    "react-lazyload": "^3.2.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  }
+}
