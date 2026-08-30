@@ -1,29 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'; // Eliminamos 'React' y 'useNavigate'
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
-/**
- * Componente para actualizar los datos del usuario.
- */
 const UpdateUser = () => {
-  // Estado inicial del formulario del usuario.
   const [user, setUser] = useState({
     username: '',
     email: '',
     password: ''
   });
 
-  // Estado para manejar errores y éxito.
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
-  // Hook de navegación para redirigir al usuario.
-  const navigate = useNavigate();
-
-  /**
-   * Efecto que se ejecuta al montar el componente para
-   * establecer el estado inicial del usuario desde el localStorage.
-   */
+  // ELIMINAMOS ESTA LÍNEA: const navigate = useNavigate();
+  
+  // ... resto de tu código
   useEffect(() => {
     setUser({
       username: localStorage.getItem('username') || '',
@@ -32,113 +22,79 @@ const UpdateUser = () => {
     });
   }, []);
 
-  /**
-   * Maneja los cambios en los campos del formulario.
-   * @param {Event} e - El evento del cambio.
-   */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
   };
 
-  /**
-   * Maneja el envío del formulario.
-   * @param {Event} e - El evento del envío.
-   */
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+    setSuccess(null);
+
+    const token = localStorage.getItem('token');
+
+    // 1. Preparamos el objeto solo con los campos modificados
+    const updatedUser = {};
+    if (user.username && user.username !== localStorage.getItem('username')) {
+      updatedUser.username = user.username;
+    }
+    if (user.email && user.email !== localStorage.getItem('email')) {
+      updatedUser.email = user.email;
+    }
+    if (user.password) {
+      updatedUser.password = user.password;
+    }
+
+    // 2. Validación de cambios
+    if (Object.keys(updatedUser).length === 0) {
+      setError('No hay cambios para actualizar');
+      return;
+    }
+
     try {
-      // Obtiene el token de autenticación del localStorage.
-      const token = localStorage.getItem('token');
-      
-      // Prepara el objeto de actualización solo con los campos modificados.
-      const updatedUser = {};
-      if (user.username && user.username !== localStorage.getItem('username')) {
-        updatedUser.username = user.username;
-      }
-      if (user.email && user.email !== localStorage.getItem('email')) {
-        updatedUser.email = user.email;
-      }
-      if (user.password) {
-        updatedUser.password = user.password;
-      }
-
-      // Verifica si hay cambios para actualizar.
-      if (Object.keys(updatedUser).length === 0) {
-        setError('No hay cambios para actualizar');
-        return;
-      }
-
-      // Realiza la petición de actualización al servidor.
+      // 3. Realizamos la petición
       const response = await axios.put(
         'http://localhost:5000/api/auth/update',
         updatedUser,
         {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+          headers: { Authorization: `Bearer ${token}` }
         }
       );
 
-      // Actualiza los valores en el localStorage si se han cambiado.
-      if (updatedUser.username) {
-        localStorage.setItem('username', response.data.user.username);
-      }
-      if (updatedUser.email) {
-        localStorage.setItem('email', response.data.user.email);
-      }
+      // 4. Actualizamos el localStorage localmente
+      if (updatedUser.username) localStorage.setItem('username', response.data.user.username);
+      if (updatedUser.email) localStorage.setItem('email', response.data.user.email);
 
-      // Muestra el mensaje de éxito.
       setSuccess('Datos actualizados exitosamente');
-      setError(null);
-
-      // Borra el mensaje de éxito después de 3 segundos.
-      setTimeout(() => {
-        setSuccess(null);
-      }, 3000);
+      setUser({ ...user, password: '' }); // Limpiamos el campo password
       
-    } catch (error) {
-      // Maneja los errores de la petición.
-      setError(error.response ? error.response.data.error : 'Error al actualizar los datos');
-      setSuccess(null);
+      setTimeout(() => setSuccess(null), 3000);
+    } catch (err) {
+      // 🔍 ESTO NOS DIRÁ LA VERDAD EN LA CONSOLA DEL NAVEGADOR (F12)
+      console.error("Detalle del error del servidor:", err.response?.data);
+      
+      setError(err.response?.data?.error || 'Error al actualizar los datos');
     }
   };
 
   return (
     <div className="update-user-form">
       <h2>Actualizar Datos del Usuario</h2>
-      {error && <p className="error">{error}</p>}
-      {success && <p className="success">{success}</p>}
+      {error && <p className="error" style={{color: 'red'}}>{error}</p>}
+      {success && <p className="success" style={{color: 'green'}}>{success}</p>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="username">Nombre de Usuario:</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={user.username}
-            onChange={handleChange}
-          />
+          <label>Nombre de Usuario:</label>
+          <input type="text" name="username" value={user.username} onChange={handleChange} />
         </div>
         <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={user.email}
-            onChange={handleChange}
-          />
+          <label>Email:</label>
+          <input type="email" name="email" value={user.email} onChange={handleChange} />
         </div>
         <div className="form-group">
-          <label htmlFor="password">Contraseña:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={user.password}
-            onChange={handleChange}
-          />
+          <label>Nueva Contraseña:</label>
+          <input type="password" name="password" value={user.password} onChange={handleChange} placeholder="Dejar vacío para no cambiar" />
         </div>
         <button type="submit">Actualizar</button>
       </form>

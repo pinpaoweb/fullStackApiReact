@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,39 +9,65 @@ const Login = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', formData);
+      
+      const { token, username, role, userId, email } = response.data;
+
+      // Guardamos en localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('username', username);
+      localStorage.setItem('role', role);
+      localStorage.setItem('userId', userId);
+      localStorage.setItem('email', email);
+
+      // Disparamos el evento para que Header.jsx se actualice SIN bucles
+      //window.dispatchEvent(new Event('authChange'));
+
       setMessage('Login exitoso');
-      localStorage.setItem('token', response.data.token);
-  
-      localStorage.setItem('username', response.data.username);
-      localStorage.setItem('role', response.data.role); // Guardar el rol del usuario
-      localStorage.setItem('userId', response.data.userId); // Guardar el ID del usuario
-      localStorage.setItem('email', response.data.email); // Almacena el email
-      window.dispatchEvent(new Event('storage')); // Disparar evento de almacenamiento
-      navigate('/');
+      
+      // Redirección segura
+      if (role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
     } catch (error) {
-      setMessage(error.response?.data?.error || 'Error en el login');
+      // Manejo de errores más descriptivo
+      console.error("Error en login:", error);
+      setMessage(error.response?.data?.error || 'Error al iniciar sesión');
     }
   };
-
+  
   return (
     <div className="payment-form">
       <form onSubmit={handleSubmit}>
         <h2>Login</h2>
-        {message && <p>{message}</p>}
+        {message && <p style={{ color: message.includes('exitoso') ? 'green' : 'red' }}>{message}</p>}
         <label>
           Email:
-          <input type="email" name="email" value={formData.email} onChange={handleChange} />
+          <input 
+            type="email" 
+            name="email" 
+            value={formData.email} 
+            onChange={handleChange} 
+            required 
+          />
         </label>
         <label>
           Password:
-          <input type="password" name="password" value={formData.password} onChange={handleChange} />
+          <input 
+            type="password" 
+            name="password" 
+            value={formData.password} 
+            onChange={handleChange} 
+            required 
+          />
         </label>
         <button type="submit">Login</button>
       </form>

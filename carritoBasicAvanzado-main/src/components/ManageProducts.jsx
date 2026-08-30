@@ -97,20 +97,17 @@ const ManageProducts = () => {
               <td>${product.precio}</td>
               <td>{product.stock}</td>
               <td>
-                {product.imagen && (
-                  <LazyLoad height={100} offset={100}>
-                    <img
-                      src={`http://localhost:5000/uploads/${product.imagen}`}
-                      
-                      alt={`Imagen de ${product.nombre}`}
-                      width="100"
-                      onError={(e) => {
-                        e.target.src = '/images/no-image.png'; // Imagen de reemplazo
-                      }}
-                    />
-                  </LazyLoad>
-                )}
-              </td>
+  {product.imagen && (
+    <img
+      src={`http://localhost:5000/uploads/${product.imagen}`}
+      alt={`Imagen de ${product.nombre}`}
+      width="100"
+      onError={(e) => {
+        e.target.src = '/images/no-image.png';
+      }}
+    />
+  )}
+</td>
               <td>
                 <button className="edit-button" onClick={() => handleEditProduct(product)}>Editar</button>
                 <button onClick={() => handleDeleteProduct(product._id)}>Eliminar</button>

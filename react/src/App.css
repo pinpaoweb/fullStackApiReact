@@ -1,3 +1,6 @@
+body {
+  background-color: red !important;
+}
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -39,4 +42,74 @@
 
 .read-the-docs {
   color: #888;
+}
+/* Forzar color naranja al logo de Pinpao */
+header h1, 
+.header h1, 
+.logo {
+    color: #FF8C00 !important;
+}
+.header h1 {
+  color: #FF8C00 !important;
+}
+
+.hero-section {
+  background-color: #f4f4f4; /* O el color que prefieras */
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.hero-overlay h1 {
+  color: #FF8C00; /* Naranja para el título */
+  font-size: 2.5rem;
+}
+
+.btn-hero {
+  display: inline-block;
+  background-color: #FF8C00;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+/* Estilos para el Hero Section */
+.hero-section {
+  background-color: #fdf5e6; /* Un tono crema suave */
+  padding: 80px 20px;
+  text-align: center;
+  border-bottom: 3px solid #FF8C00; /* Borde naranja */
+}
+
+.hero-overlay h1 {
+  color: #FF8C00; /* Naranja para el título */
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.hero-overlay p {
+  font-size: 1.2rem;
+  color: #555;
+  max-width: 600px;
+  margin: 0 auto 30px;
+}
+
+.btn-hero {
+  display: inline-block;
+  background-color: #FF8C00;
+  color: white;
+  padding: 15px 30px;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 25px;
+  transition: background 0.3s;
+}
+
+.btn-hero:hover {
+  background-color: #e07b00;
+}
+
+/* Espacio para la lista de productos */
+#catalogo {
+  padding: 40px 20px;
 }

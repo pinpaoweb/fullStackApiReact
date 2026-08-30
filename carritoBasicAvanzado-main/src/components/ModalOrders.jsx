@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import ManageOrders from './ManageOrders';
+import './ModalOrders.css';
 
-const ModalOrders = ({
-  order,
-  setSelectedOrder,
-  setOrders,
-  setFilteredOrders,
-  orders,
-  filteredOrders,
-}) => {
+const ModalOrders = ({ order, setSelectedOrder, setOrders, setFilteredOrders, orders, filteredOrders }) => {
   const [orderToDelete, setOrderToDelete] = useState(null);
 
   const handleUpdateOrder = async (updatedOrder) => {
@@ -24,9 +17,8 @@ const ModalOrders = ({
     }
   };
 
-  const confirmDeleteOrder = () => {
-    setOrderToDelete(order._id);
-  };
+  const confirmDeleteOrder = () => setOrderToDelete(order._id);
+  const handleCloseConfirmation = () => setOrderToDelete(null);
 
   const handleDeleteOrder = async () => {
     try {
@@ -40,113 +32,78 @@ const ModalOrders = ({
     }
   };
 
-  const handleCloseConfirmation = () => {
-    setOrderToDelete(null);
+  // Función útil para obtener las iniciales del producto
+  const getInitials = (name) => {
+    return name ? name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) : 'P';
   };
 
   return (
-    <React.Fragment>
-      <div className="modal">
-        <div className="modal-contenido">
-          <button className="cerrar-boton" onClick={() => setSelectedOrder(null)}>×</button>
-          <h3>Actualizar Pedido</h3>
-          <div className="form-fila">
-            <label>
-              Estado:
-              <select
-                value={order.estado}
-                onChange={(e) => setSelectedOrder({ ...order, estado: e.target.value })}
-                className="estado-select"
-              >
-                <option value="PENDIENTE">Pendiente</option>
-                <option value="PAGADO">Pagado</option>
-                <option value="ENVIADO">Enviado</option>
-              </select>
-            </label>
-          </div>
-          <div className="form-fila">
-            <div className="form-columna">
-              <label>
-                Nombre de Envío:
-                <input
-                  type="text"
-                  value={order.nombreEnvio}
-                  onChange={(e) => setSelectedOrder({ ...order, nombreEnvio: e.target.value })}
+    <div className="modal">
+      <div className="modal-contenido">
+        <button className="cerrar-boton" onClick={() => setSelectedOrder(null)}>×</button>
+        <h3>Actualizar Pedido</h3>
+
+        {/* Zona del formulario fija */}
+        <div className="form-fila">
+          <label>Estado:
+            <select value={order.estado} onChange={(e) => setSelectedOrder({ ...order, estado: e.target.value })} className="estado-select">
+              <option value="PENDIENTE">Pendiente</option>
+              <option value="PAGADO">Pagado</option>
+              <option value="ENVIADO">Enviado</option>
+            </select>
+          </label>
+        </div>
+
+        {/* Zona de lista con scroll */}
+        <div className="lista-productos-scroll">
+          <h4>Productos del Pedido:</h4>
+          {order.pedido?.map((item, index) => (
+            <div key={index} className="producto-detalle">
+              {/* Lógica de imagen profesional (con fallback) */}
+              {item.producto?.imagen ? (
+                <img 
+                  src={`http://localhost:5000/uploads/${item.producto.imagen}`} 
+                  alt={item.producto.nombre}
+                  className="foto-producto"
+                  onError={(e) => {
+                    // Si falla, muestra el recuadro con iniciales
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                  }}
                 />
-              </label>
-            </div>
-            <div className="form-columna">
-              <label>
-                Teléfono de Envío:
-                <input
-                  type="text"
-                  value={order.telefonoEnvio}
-                  onChange={(e) => setSelectedOrder({ ...order, telefonoEnvio: e.target.value })}
-                />
-              </label>
-            </div>
-            <div className="form-columna">
-              <label>
-                Dirección de Envío:
-                <input
-                  type="text"
-                  value={order.direccionEnvio}
-                  onChange={(e) => setSelectedOrder({ ...order, direccionEnvio: e.target.value })}
-                />
-              </label>
-            </div>
-          </div>
-          <div className="form-fila">
-            <div className="form-columna">
-              <label>
-                Barrio:
-                <input
-                  type="text"
-                  value={order.barrioEnvio}
-                  onChange={(e) => setSelectedOrder({ ...order, barrioEnvio: e.target.value })}
-                />
-              </label>
-            </div>
-            <div className="form-columna">
-              <label>
-                Municipio:
-                <input
-                  type="text"
-                  value={order.municipioEnvio}
-                  onChange={(e) => setSelectedOrder({ ...order, municipioEnvio: e.target.value })}
-                />
-              </label>
-            </div>
-            <div className="form-columna">
-              <label>
-                Departamento:
-                <input
-                  type="text"
-                  value={order.departamentoEnvio}
-                  onChange={(e) => setSelectedOrder({ ...order, departamentoEnvio: e.target.value })}
-                />
-              </label>
-            </div>
-          </div>
-          <div className="boton-fila">
-            <button onClick={() => handleUpdateOrder(order)}>Actualizar</button>
-            <button onClick={confirmDeleteOrder}>Eliminar</button>
-          </div>
-          {orderToDelete && (
-            <div className="modal-confirmacion">
-              <div className="modal-contenido-confirmacion">
-                <div className="confirmacion-logo">⚠️</div>
-                <div className="confirmacion-mensaje">¿Está seguro de que desea eliminar este pedido?</div>
-                <div className="boton-confirmacion-fila">
-                  <button className="confirmar" onClick={handleDeleteOrder}>Eliminar</button>
-                  <button className="cancelar" onClick={handleCloseConfirmation}>Cancelar</button>
-                </div>
+              ) : null}
+              {/* Recuadro de fallback (iniciales) */}
+              <div className="foto-placeholder" style={{ display: item.producto?.imagen ? 'none' : 'flex' }}>
+                {getInitials(item.producto?.nombre)}
+              </div>
+              
+              <div className="info-producto">
+                <strong>{item.producto?.nombre || "Producto"}</strong>
+                <p>Cantidad: {item.cantidad} | Precio: ${item.precio?.toLocaleString('es-CO')}</p>
               </div>
             </div>
-          )}
+          ))}
         </div>
+
+        {/* Zona de botones fija al fondo */}
+        <div className="boton-fila">
+          <button className="btn-actualizar" onClick={() => handleUpdateOrder(order)}>Actualizar</button>
+          <button className="btn-eliminar" onClick={confirmDeleteOrder}>Eliminar</button>
+        </div>
+
+        {orderToDelete && (
+          <div className="modal-confirmacion">
+            <div className="modal-contenido-confirmacion">
+              <p>¿Está seguro de eliminar este pedido?</p>
+              <div className="boton-confirmacion-fila">
+                <button onClick={handleDeleteOrder}>Eliminar</button>
+                <button onClick={handleCloseConfirmation}>Cancelar</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-    </React.Fragment>
+    </div>
   );
 };
 

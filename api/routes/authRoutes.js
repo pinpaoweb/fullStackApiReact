@@ -13,6 +13,6 @@ router.get('/protected', authMiddleware, (req, res) => {
   });
 
 // Ruta protegida para actualizar datos del usuario
-router.put('/update', authMiddleware, updateUser);
+router.put('/usuarios/:id', authMiddleware, updateUser);
 
 module.exports = router;

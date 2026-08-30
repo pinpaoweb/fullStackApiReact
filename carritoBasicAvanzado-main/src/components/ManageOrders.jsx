@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ModalOrders from './ModalOrders.jsx';
 
+
+
 // Define el componente ManageOrders
 const ManageOrders = () => {
   // Declara los estados del componente
@@ -70,6 +72,7 @@ const ManageOrders = () => {
           <p>No se encontraron pedidos.</p>
         )}
       </div>
+
       {/* Muestra el modal si hay un pedido seleccionado */}
       {selectedOrder && (
         <ModalOrders 

@@ -1,3 +1,13 @@
+:root {
+    /* Estas rutas asumen que tus archivos están en la carpeta public/images */
+    --img-logo: url('/images/logo.svg'); 
+    --img-completed: url('/images/status_ok.svg');
+    --img-alert: url('/images/alert.svg');
+    --img-info: url('/images/info.svg');
+    --img-tooltip: url('/images/tooltip.svg');
+    --no-video-img: url('/images/no-video-illustration.svg');
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -501,6 +511,25 @@ body {
   color: #333;
 }
 
+
+
+  
+
+/* Párrafos dentro de los detalles del producto */
+.item-details p {
+  margin: 2px 0;
+  font-size: 14px;
+}
+
+/* Títulos dentro del cuerpo y pie de la tarjeta de pedido */
+.pedido-body h3,
+.pedido-footer h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #333;
+}
+
 /* Elemento individual de producto dentro de la tarjeta de pedido */
 .pedido-item {
   display: flex;
@@ -511,6 +540,7 @@ body {
   background-color: #f9f9f9;
 }
 
+/* Imagen del producto */
 .product-image {
   width: 60px;
   height: 60px;
@@ -559,7 +589,6 @@ p strong {
   color: #5bc0de;
   background-color: #d9edf7;
 }
-
 /**************************************************************/
 
 
@@ -946,4 +975,876 @@ span a:hover {
   color: #ff9800; /* Color del texto al pasar el cursor */
 }
 
-/****************************************************************************/
+/****************************************************************************//* =========================================
+   DISEÑO DE LA PÁGINA DE INICIO (PINPAO)
+   ========================================= */
+
+/* 1. SECCIÓN HERO */
+.hero-section {
+  /* Pon aquí una imagen tuya, de suplementos o de estilo de vida */
+  background-image: url('https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  height: 75vh;
+  position: relative;
+}
+
+.hero-overlay {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4));
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 5%;
+}
+
+.hero-content {
+  max-width: 600px;
+  color: white;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  line-height: 1.1;
+  color: #ff9f43; /* Naranja vitalidad */
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  color: #f1f2f6;
+  line-height: 1.5;
+}
+
+.btn-hero {
+  display: inline-block;
+  background-color: #ff9f43;
+  color: #1e272e;
+  padding: 15px 35px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 159, 67, 0.4);
+}
+
+.btn-hero:hover {
+  background-color: #ff7f50;
+  color: white;
+  transform: translateY(-3px);
+}
+
+/* 2. BARRA DE BENEFICIOS */
+.benefits-bar {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  background-color: #1e272e;
+  padding: 20px 5%;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 10px;
+}
+
+/* 3. CONTENEDOR DEL CATÁLOGO */
+.catalogo-container {
+  padding: 60px 5%;
+  background-color: #f8f9fa;
+}
+
+.titulo-catalogo {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #2f3640;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Animación de entrada suave */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Estilo del contenedor de la cuadrícula */
+.product-list {
+  display: grid;
+  /* Esto crea columnas que se ajustan solas (mínimo 250px por tarjeta) */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 25px; /* Espacio entre cada tarjeta */
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Nota: Asegúrate de que las tarjetas individuales (el componente Product) 
+   tengan un padding y un borde limpio para que se vean bien dentro de este grid */
+   /* Estilo general de la tarjeta */
+.product {
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  border: 1px solid #eee;
+}
+
+/* Efecto al pasar el mouse */
+.product:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.product img {
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.product h2 {
+  font-size: 1.1rem;
+  margin: 10px 0;
+  color: #2c3e50;
+  height: 40px; /* Altura fija para que no se muevan los botones si el nombre es largo */
+}
+
+/* Estilo del selector de cantidad */
+.product div {
+  margin: 15px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.product button:not(:last-child) {
+  background: #ecf0f1;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Botón Añadir al carrito */
+.product button:last-child {
+  background: #ff9f43;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.product button:last-child:hover {
+  background: #e67e22;
+}
+/* Capa oscura de fondo */
+.cart-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: flex-end; /* Alinea el panel a la derecha */
+  z-index: 1000;
+}
+
+/* Panel del carrito */
+.cart-menu-content {
+  width: 350px;
+  background: white;
+  height: 100%;
+  padding: 20px;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease-out;
+}
+
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #f8f9fa;
+  padding-bottom: 10px;
+}
+
+.cart-items {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin: 20px 0;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9rem;
+}
+
+.cart-footer {
+  border-top: 2px solid #eee;
+  padding-top: 20px;
+}
+
+.btn-pagar {
+  width: 100%;
+  padding: 15px;
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+/* Animación de entrada */
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+.header .logo h1 {
+  font-size: 1.5rem;
+  color: #ff9f43; /* El mismo naranja de tu sección Hero */
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0;
+}
+/* Esto busca el h1 dentro de tu logo en el header y lo pinta de naranja */
+.header .logo h1 {
+  color: #ff9f43 !important;
+}
+.header .logo h1 {
+  color: #ff9f43 !important;
+  font-weight: 800; /* Hace que se vea más grueso y fuerte */
+  letter-spacing: 1px; /* Le da un toque más moderno */
+}
+/* Fondo oscuro que oscurece el resto de la web */
+.cart-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-end; /* Empuja el panel a la derecha */
+}
+
+/* El panel que contiene el carrito */
+.cart-menu {
+  width: 350px;
+  background: white;
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column; /* Alinea todo verticalmente */
+  box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+  animation: slideIn 0.3s ease-out;
+}
+
+.cart-items-list {
+  list-style: none;
+  flex-grow: 1;           /* Ocupa todo el espacio disponible */
+  overflow-y: auto;       /* Solo esta parte tendrá scroll */
+  padding-bottom: 20px;
+}
+
+.cart-footer {
+  flex-shrink: 0;         /* Impide que el footer se encoja o desaparezca */
+  border-top: 2px solid #eee;
+  padding-top: 20px;
+  background: white;      /* Asegura que no se vea nada detrás */
+}
+
+/* Reducimos un poco el tamaño de los ítems para ganar espacio */
+.cart-item {
+  padding: 8px 0;
+  font-size: 0.85rem;
+}.btn-pagar {
+  background: #ff9f43; /* Tu naranja PINPAO */
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: bold;
+}
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+.invoice-container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 30px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.invoice-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.invoice-form input {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.success-msg {
+  color: #27ae60;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.payment-form {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.payment-form h1 {
+  color: #ff9f43; /* Tu naranja PINPAO */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.payment-form input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box; /* Importante para que el padding no rompa el diseño */
+}
+
+.payment-form button {
+  width: 100%;
+  padding: 15px;
+  background: #ff9f43;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background 0.3s;
+}
+
+.payment-form button:hover {
+  background: #e67e22;
+}
+.boton-fila button {
+  padding: 10px 20px;
+  background-color: #ff9f43; /* Tu color PINPAO */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.producto-detalle img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%; /* Esto hace que la imagen sea un círculo perfecto */
+}
+/* Estilos para el placeholder de imagen (fallback) */
+.foto-placeholder {
+  width: 60px;
+  height: 60px;
+  background-color: #34495e; /* Color oscuro profesional */
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  border: 1px solid #ddd;
+}
+
+/* Toque de color a los botones */
+.btn-actualizar {
+  background-color: #2ecc71; /* Verde */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.btn-actualizar:hover { background-color: #27ae60; }
+
+.btn-eliminar {
+  background-color: #e74c3c; /* Rojo */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.btn-eliminar:hover { background-color: #c0392b; }
+/* Forzar prioridad máxima sobre todo el archivo de 1000 líneas */
+body, #root, .app, .header {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+}
+.envios-section {
+    padding: 50px;
+    background-color: #fff;
+}
+
+.envios-container {
+    display: flex;
+    flex-wrap: wrap; /* Para que en celular se vea uno debajo de otro */
+    max-width: 1100px;
+    margin: 0 auto;
+    align-items: center;
+    gap: 40px;
+}
+
+.envios-foto {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    justify-content: center; /* Centra la imagen */
+}
+
+.envios-foto img {
+    display: block;
+    width: 100%;
+    max-width: 500px;
+    height: auto; /* IMPORTANTE: Esto evita que la imagen se colapse */
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.envios-lista { 
+    list-style: none; 
+    margin: 20px 0; 
+    padding: 0;
+}
+
+.envios-lista li { 
+    margin-bottom: 10px; 
+}
+
+/* Diseño responsivo para móviles */
+@media (max-width: 768px) {
+    .envios-container {
+        flex-direction: column; 
+    }
+    .envios-info {
+        text-align: center;
+    }
+}
+.envios-section {
+    padding: 60px 20px;
+    background-color: #f9f9f9;
+}
+
+.envios-container {
+    display: flex;
+    flex-wrap: wrap; /* Para que sea responsivo */
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1100px;
+    margin: 0 auto;
+    gap: 40px;
+}
+
+.envios-info {
+    flex: 1;
+    min-width: 300px;
+}
+
+.envios-info h2 {
+    font-size: 2.5rem;
+    color: #242424;
+    margin-bottom: 1rem;
+}
+
+.envios-lista {
+    margin: 20px 0;
+}
+
+.item-lista {
+    background: #fff;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border-left: 5px solid #0F71F0;
+}
+
+.envios-foto {
+    flex: 1;
+    min-width: 300px;
+    text-align: center;
+}
+
+.envios-foto img {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 30px; /* Borde más redondeado para un look moderno */
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease;
+}
+
+.envios-foto img:hover {
+    transform: scale(1.02); /* Pequeño efecto al pasar el mouse */
+}
+
+.btn-comprar {
+    background-color: #0F71F0;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+}
+.btn-container-volver {
+    margin-top: 30px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-volver {
+    background-color: #f4f4f4;
+    color: #333;
+    border: 2px solid #0F71F0;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-volver:hover {
+    background-color: #0F71F0;
+    color: white;
+}
+.layout-wrapper {
+    max-width: 1280px; /* Igual que tu #root */
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.main-content {
+    /* Esto garantiza que el contenido interno tenga el mismo espaciado */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+/* index.css */
+.envios-section {
+  padding: 60px 20px;
+  background-color: #f9f9f9;
+}
+
+.envios-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.envios-info {
+  flex: 1;
+  min-width: 300px;
+}
+
+.envios-foto img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.envios-lista {
+  list-style: none;
+  padding: 0;
+}
+
+.envios-lista li {
+  margin-bottom: 10px;
+}
+
+.btn-comprar {
+  background-color: #27ae60;
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+/* Limita la descripción para que no deforme la tarjeta */
+.product-description {
+  max-height: 3em;      /* Limita la altura a 3 líneas */
+  overflow: hidden;     /* Oculta el exceso */
+  text-overflow: ellipsis; /* Pone puntos suspensivos */
+  font-size: 0.9rem;
+}
+/* Esto asegura que la imagen de la tarjeta no se salga de su lugar */
+.product-card img {
+  width: 100%;          /* Que ocupe el ancho total del contenedor */
+  height: 250px;        /* Altura fija para que todas sean iguales */
+  object-fit: contain;  /* Mantiene la proporción sin estirar la foto */
+  display: block;
+  margin: 0 auto;       /* Centrada */
+}
+
+/* Opcional: Asegura que la tarjeta no sea gigante */
+.product-card {
+  width: 300px;         /* Tamaño de la tarjeta */
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  text-align: center;
+}
+
+/* Transición suave para la tarjeta completa */
+.product-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 15px;
+  /* ... tus otros estilos existentes ... */
+}
+
+/* Efecto al pasar el mouse por encima (dinamismo) */
+.product-card:hover {
+  transform: translateY(-10px); /* La tarjeta sube un poco */
+  box-shadow: 0 15px 25px rgba(0,0,0,0.15); /* Aparece una sombra profunda */
+}
+/* 1. Efecto suave para la imagen (¡Mantenlo!) */
+.product-card img {
+  transition: transform 0.3s ease;
+  width: 100%; /* Asegura que la imagen no se desborde */
+  height: 200px; /* Altura fija para que todas las tarjetas sean iguales */
+  object-fit: contain; /* Ajusta la imagen sin deformarla */
+}
+
+.product-card:hover img {
+  transform: scale(1.05);
+}
+
+/* 2. Botón de agregar (¡Mantenlo!) */
+.btn-agregar {
+  background-color: #ff8c42;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  width: 100%; /* Hace que el botón ocupe el ancho total para uniformidad */
+}
+
+.btn-agregar:hover {
+  background-color: #e67e22;
+}
+
+/* 3. Botón de descripción (¡Mantenlo!) */
+.btn-info {
+  background: transparent;
+  border: none;
+  color: #0F71F0;
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin: 10px 0;
+  display: block; /* Asegura que no se desplace lateralmente */
+}
+
+/* 4. Estilo de la descripción (¡Mejorado!) */
+.product-description.active {
+  padding: 10px;
+  background: #f4f4f4; /* Un gris un poco más marcado para distinguir del fondo */
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 0.85rem;
+  text-align: justify;
+  line-height: 1.4;
+  max-height: 120px; /* Ligeramente más bajo para que no desfigure la tarjeta */
+  overflow-y: auto;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.footer-link {
+  color: #ffffff; /* Blanco para máxima legibilidad */
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espacio entre el icono y el texto */
+  transition: all 0.3s ease; /* Transición para que el cambio de color sea suave */
+}
+
+/* Efecto al pasar el cursor (hover) */
+.footer-link:hover {
+  color: #ff9933; /* El naranja de tu botón 'Explorar Catálogo' */
+  cursor: pointer;
+}
+/* --- Corrección solicitada por el profesor --- */
+
+.benefit-item {
+  color: #ffffff;      /* Blanco para que se vea claro */
+  text-decoration: none; 
+}
+
+.benefit-item:hover {
+  color: #ff9f43;      /* Cambia al naranja de tu botón hero al pasar el mouse */
+  cursor: pointer;
+}
+.imc-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.imc-form input {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.btn-primary {
+  background: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  margin-top: 20px;
+  background: #6c757d;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.imc-result {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+.pedido-card {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Sombra suave */
+  transition: transform 0.2s;
+}
+
+.pedido-header {
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+/* Para resaltar el estado */
+.estado-badge {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  font-weight: bold;
+}
+
+/* Grid para envío */
+.info-envio-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 15px;
+}
+.pedido-card {
+  /* ... tus estilos actuales ... */
+  text-align: left; /* Alinea todo el contenido a la izquierda */
+}
+
+.info-envio-grid {
+  /* Elimina o comenta esta línea: 
+  grid-template-columns: 1fr 1fr; 
+  */
+  display: block; /* Asegúrate de que sea block */
+  gap: 10px;
+  margin-top: 15px;
+}
+.total-precio {
+  text-align: right; /* El total queda mejor a la derecha */
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-top: 15px;
+}

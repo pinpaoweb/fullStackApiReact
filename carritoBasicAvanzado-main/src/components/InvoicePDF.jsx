@@ -1,37 +1,71 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable'; // Importar el plugin de autotable
+import 'jspdf-autotable'; 
+import { getInvoiceNumber, getInvoiceDate } from './invoiceUtils';
+import JsBarcode from "jsbarcode";
 
 const InvoicePDF = () => {
   const location = useLocation();
-  const { name, email, address, barrio, municipio, departamento, cartItems, paymentCode } = location.state;
-  const total = cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  
+  // SOLUCIÓN: Agregamos "|| {}" y valores por defecto para evitar caídas si el estado viene vacío
+  const { 
+    name = 'No especificado', 
+    email = 'No especificado', 
+    address = 'No especificado', 
+    barrio = 'No especificado', 
+    municipio = 'No especificado', 
+    departamento = 'No especificado', 
+    cartItems = [], 
+    paymentCode = 'N/A' 
+  } = location.state || {};
+
+  const total = cartItems.reduce((sum, item) => {
+    const precio = item.product?.price || 0;
+    return sum + (precio * item.quantity);
+  }, 0);
 
   const generatePDF = () => {
-    const doc = new jsPDF('p', 'mm', 'letter'); // Tamaño carta (8.5 x 11 pulgadas)
+    const doc = new jsPDF('p', 'mm', 'letter');
+    const invoiceNumber = getInvoiceNumber();
+    const fecha = getInvoiceDate();
 
-    // Añadir logotipo (asegúrate de que la imagen esté disponible en la ruta especificada)
-    const logo = '/logo.png'; // Reemplazar con la ruta de tu logotipo
-    doc.addImage(logo, 'PNG', 10, 10, 50, 20);
+    console.log("FACTURA NUEVA:", invoiceNumber);
+
+    // Añadir logotipo
+    const logo = '/logo.png'; 
+    try {
+      doc.addImage(logo, 'PNG', 10, 10, 50, 20);
+    } catch (e) {
+      console.warn("No se pudo cargar el logo en el PDF, continuando sin él.");
+    }
 
     // Encabezado
+    doc.setLineWidth(0.5);
+    doc.line(14, 70, 200, 70);
     doc.setFontSize(18);
     doc.setTextColor(40);
     doc.setFont('helvetica', 'bold');
-    doc.text('Factura', 105, 20, null, null, 'center');
+    doc.text('FACTURA DE VENTA', 105, 18, null, null, 'center');
 
+    // Subtítulos factura
     doc.setFontSize(11);
-    doc.setTextColor(100);
     doc.setFont('helvetica', 'normal');
-    doc.text('pinpao', 105, 30, null, null, 'center');
-    doc.text('calle 6 2-40', 105, 35, null, null, 'center');
-    doc.text('Teléfono: 3012802459', 105, 40, null, null, 'center');
-    doc.text('Correo: info@pinpao', 105, 45, null, null, 'center');
+    doc.setTextColor(40);
+    doc.text(`Factura No: ${invoiceNumber}`, 105, 26, null, null, 'center');
+    doc.text(`Fecha: ${fecha}`, 105, 32, null, null, 'center');
+
+    // Datos empresa
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text('Pinpao', 105, 42, null, null, 'center');
+    doc.text('Calle 6 2-40', 105, 47, null, null, 'center');
+    doc.text('Teléfono: 3012802459', 105, 52, null, null, 'center');
+    doc.text('Correo: info@pinpao.co', 105, 57, null, null, 'center');
 
     // Información del cliente
     doc.setFontSize(12);
-    let yOffset = 60;
+    let yOffset = 75;
     const lineSpacing = 10;
     const labelX = 14;
     const valueX = 60;
@@ -77,20 +111,26 @@ const InvoicePDF = () => {
     doc.setFont('helvetica', 'bold');
     doc.text('Código de Pago:', labelX, yOffset);
     doc.setFont('helvetica', 'normal');
-    doc.text(paymentCode.toString(), valueX, yOffset);
+    
+    // CORRECCIÓN SEGURA: Evitamos el uso directo de .toString() si es undefined
+    doc.text(String(paymentCode), valueX, yOffset);
 
-    yOffset += lineSpacing + 10; // Espacio extra antes de la tabla
+    yOffset += lineSpacing + 10; 
 
     // Tabla de artículos
     const tableColumn = ["Producto", "Cantidad", "Precio Unitario", "Total"];
     const tableRows = [];
 
     cartItems.forEach(item => {
+      const nombreProducto = item.product?.name || 'Producto';
+      const precioUnitario = item.product?.price || 0;
+      const cantidad = item.quantity || 0;
+
       const productData = [
-        item.product.name,
-        item.quantity.toString(),
-        `$${item.product.price.toFixed(2)}`,
-        `$${(item.product.price * item.quantity).toFixed(2)}`,
+        nombreProducto,
+        cantidad.toString(),
+        `$${precioUnitario.toFixed(2)}`,
+        `$${(precioUnitario * cantidad).toFixed(2)}`,
       ];
       tableRows.push(productData);
     });
@@ -101,25 +141,40 @@ const InvoicePDF = () => {
       startY: yOffset,
       theme: 'striped',
       styles: { fontSize: 10, cellPadding: 3 },
-      headStyles: { fillColor: [41, 128, 185], textColor: [255, 255, 255] }, // Color de fondo del encabezado
-      alternateRowStyles: { fillColor: [240, 240, 240] } // Color de fondo alternativo para las filas
+      headStyles: { fillColor: [41, 128, 185], textColor: [255, 255, 255] }, 
+      alternateRowStyles: { fillColor: [240, 240, 240] } 
     });
 
     // Total
-    const finalY = doc.lastAutoTable.finalY + 10;
+    const finalY = (doc.lastAutoTable?.finalY || yOffset) + 20;
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.text(`Total: $${total.toFixed(2)} USD`, labelX, finalY);
+    doc.text(`Total: COP $${total.toFixed(2)}`, labelX, finalY);
 
     // Pie de página
     doc.setFontSize(12);
     doc.setFont('helvetica', 'italic');
-    doc.setTextColor(0, 128, 0); // Verde
-    doc.text('Gracias por su compra', 105, finalY + 20, null, null, 'center');
-    doc.text('Por favor, conserve esta factura para sus registros', 105, finalY + 30, null, null, 'center');
+    doc.setTextColor(0, 150, 0); 
+    doc.text('Gracias por su compra', 105, finalY + 45, null, null, 'center');
+    doc.text('Por favor, conserve esta factura para sus registros', 105, finalY + 52, null, null, 'center');
+
+    // Código de barras
+    try {
+      const canvas = document.createElement("canvas");
+      const safeInvoiceNumber = String(invoiceNumber || Date.now());
+      JsBarcode(canvas, safeInvoiceNumber, {
+        format: "CODE128",
+        displayValue: true,
+        fontSize: 12,
+      });
+      const barcodeImg = canvas.toDataURL("image/png");
+      doc.addImage(barcodeImg, "PNG", 14, finalY + 15, 90, 20);
+    } catch (barcodeError) {
+      console.error("Error generando el código de barras:", barcodeError);
+    }
 
     // Guardar el PDF
-    doc.save('factura.pdf');
+    doc.save(`factura_${invoiceNumber}.pdf`);
   };
 
   return (
@@ -132,18 +187,34 @@ const InvoicePDF = () => {
       <p>Municipio: {municipio}</p>
       <p>Departamento: {departamento}</p>
       <p>Código de Pago: {paymentCode}</p>
+      
       <h2>Artículos:</h2>
-      {cartItems.map(item => (
-        <div key={item.product.id}>
-          <span>{item.product.name} (x{item.quantity})</span>
-          <span>{item.product.price * item.quantity} USD</span>
+      {cartItems.map((item, index) => (
+        <div key={item.product?.id || index}>
+          <span>{item.product?.name || 'Producto'} (x{item.quantity})</span>
+          <span> ${(item.product?.price || 0) * item.quantity} COP</span>
         </div>
       ))}
-      <h2>Total: {total} USD</h2>
+      
+      <h2>Total: {total} COP</h2>
       <button onClick={generatePDF}>Descargar Factura en PDF</button>
       <button onClick={() => alert('Proceder al pago PSE o en efectivo')}>Proceder al Pago</button>
     </div>
   );
 };
+// En tu componente InvoicePDF.jsx
+const handlePrint = () => {
+  window.print(); // Esta es la forma más fácil de convertir a PDF usando el navegador
+};
+
+// Dentro del JSX:
+<div className="invoice-actions">
+  <button onClick={handlePrint} className="btn-descargar">
+    Descargar Factura PDF
+  </button>
+  <button onClick={() => navigate('/')} className="btn-volver">
+    Volver a la Tienda
+  </button>
+</div>
 
 export default InvoicePDF;

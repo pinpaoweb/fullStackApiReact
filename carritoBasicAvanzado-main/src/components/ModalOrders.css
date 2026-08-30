@@ -1,0 +1,57 @@
+/* 1. Fondo de toda la ventana modal */
+.modal {
+  background: rgba(0, 0, 0, 0.6); /* Fondo oscuro para que el modal resalte */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 2. El cuadro principal del modal */
+.modal-contenido {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 25px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* 3. Lista de productos (con fondo gris suave para notar la diferencia) */
+.lista-productos-scroll {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #f1f3f5; /* Un gris muy claro que contrasta con el blanco */
+  border-radius: 8px;
+  padding: 15px;
+  margin: 15px 0;
+  border: 1px solid #dee2e6;
+}
+
+/* 4. Cada tarjeta de producto (blanca, para que resalte sobre el fondo gris) */
+.producto-detalle {
+  background: #ffffff;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* 5. Los botones de abajo (con un borde superior para separarlos) */
+.boton-fila {
+  border-top: 2px solid #e9ecef;
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-around; /* Separa bien los botones */
+}

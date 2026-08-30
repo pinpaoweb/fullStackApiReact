@@ -1,43 +1,35 @@
-import React, {  useEffect, useState } from 'react';
-import axios from 'axios';
-function ProductPage({ productId }) {
-  const [product, setProduct] = useState(null);
+import { useState } from 'react';
+import { API_URL } from './config'; // Usamos la configuración centralizada
 
-  useEffect(() => {
-    axios.get(`/api/products/${productId}`)
-      .then(response => {
-        setProduct(response.data);
-      })
-      .catch(error => {
-        console.error('Error al obtener el producto:', error);
-      });
-  }, [productId]);
-
-  return (
-    <div>
-      {product ? (
-        <Product product={product} />
-      ) : (
-        <p>Cargando producto...</p>
-      )}
-    </div>
-  );
-}
 const Product = ({ product, onAddToCart }) => {
-  const [quantity, setQuantity] = useState(1);
- 
-  const imageURL = `http://localhost:5000/uploads/${product.imagen}`;
+  const [showDesc, setShowDesc] = useState(false);
+
+  // Ya no necesitas definir IP ni baseUrl aquí, usas API_URL importado
   return (
-    <div className="product">
-      <img src={imageURL} alt={product.name} />
-      <h2>{product.name}</h2>
-      <p>${product.price.toFixed(2)}</p>
-      <div className="quantity-controls">
-        <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
-        <span>{quantity}</span>
-        <button onClick={() => setQuantity(quantity + 1)}>+</button>
-      </div>
-      <button onClick={() => onAddToCart(product, quantity)}>Añadir al Carrito</button>
+    <div className="product-card">
+      <img 
+        src={`${API_URL}/uploads/${product.imagen}`} 
+        alt={product.name} 
+        // Si la imagen falla, ocultamos el elemento
+        onError={(e) => { e.target.style.display = 'none'; }} 
+      />
+      <h3>{product.name}</h3>
+      
+      <button className="btn-info" onClick={() => setShowDesc(!showDesc)}>
+        {showDesc ? 'Ocultar descripción ⬆' : 'Ver descripción ⬇'}
+      </button>
+
+      {showDesc && (
+        <p className="product-description active">
+          {product.descripcion}
+        </p>
+      )}
+      
+      <p className="product-price">Precio: ${product.price?.toLocaleString() || '0'}</p>
+      
+      <button className="btn-agregar" onClick={() => onAddToCart(product, 1)}>
+        Agregar al Carrito
+      </button>
     </div>
   );
 };

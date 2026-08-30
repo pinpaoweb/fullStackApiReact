@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [message, setMessage] = useState('');
-  const navigate = useNavigate();
+
+  // Detectamos la IP automáticamente para que funcione en cualquier dispositivo
+  const API_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:5000' 
+    : `http://${window.location.hostname}:5000`;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,18 +18,37 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', formData);
+      // 1. Agregamos { withCredentials: true } para que el celular acepte la sesión/cookie
+      const response = await axios.post(`${API_URL}/api/auth/login`, formData, {
+        withCredentials: true 
+      });
+      
+      const { token, username, role, userId, email } = response.data;
+      
+      // 2. Guardado en localStorage
+      localStorage.setItem('user', JSON.stringify(response.data));
+      localStorage.setItem('username', username);
+      localStorage.setItem('role', role);
+      localStorage.setItem('token', token);
+      localStorage.setItem('userId', userId);
+      localStorage.setItem('email', email);
+      
+      // 3. Disparar eventos de sincronización
+      window.dispatchEvent(new Event('storage'));
+      window.dispatchEvent(new CustomEvent('user-login'));
+      
       setMessage('Login exitoso');
-      localStorage.setItem('token', response.data.token);
-  
-      localStorage.setItem('username', response.data.username);
-      localStorage.setItem('role', response.data.role); // Guardar el rol del usuario
-      localStorage.setItem('userId', response.data.userId); // Guardar el ID del usuario
-      localStorage.setItem('email', response.data.email); // Almacena el email
-      window.dispatchEvent(new Event('storage')); // Disparar evento de almacenamiento
-      navigate('/');
+
+      // 4. Redirección segura
+      if (role === 'admin') {
+        window.location.href = '/admin';
+      } else {
+        window.location.href = '/';
+      }
+      
     } catch (error) {
-      setMessage(error.response?.data?.error || 'Error en el login');
+      console.error("Error en login:", error);
+      setMessage(error.response?.data?.error || 'Error en el login. Verifica tu red.');
     }
   };
 
@@ -37,11 +59,11 @@ const Login = () => {
         {message && <p>{message}</p>}
         <label>
           Email:
-          <input type="email" name="email" value={formData.email} onChange={handleChange} />
+          <input type="email" name="email" value={formData.email} onChange={handleChange} required />
         </label>
         <label>
           Password:
-          <input type="password" name="password" value={formData.password} onChange={handleChange} />
+          <input type="password" name="password" value={formData.password} onChange={handleChange} required />
         </label>
         <button type="submit">Login</button>
       </form>

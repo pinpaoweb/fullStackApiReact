@@ -1,12 +1,31 @@
 const Pedido = require('../models/Pedido');
+const Venta = require('../models/Sale'); 
 
 exports.nuevoPedido = async (req, res, next) => {
     const pedido = new Pedido(req.body);
     try {
+        // 1. Guardamos el pedido principal (Dirección, cliente, etc.)
         await pedido.save();
-        res.json({ mensaje: 'Se agregó un nuevo pedido' });
+
+        // 2. Mapeamos los elementos de forma limpia y segura
+        const itemsMapeados = (req.body.pedido || []).map(item => ({
+            producto: item.producto,
+            name: item.nombre || item.name,       
+            price: item.precio || item.price,     
+            quantity: item.cantidad || item.quantity 
+        }));
+
+        const nuevaVenta = new Venta({
+            total: req.body.total,
+            items: itemsMapeados,
+            date: new Date().toISOString().split('T')[0] 
+        });
+        
+        await nuevaVenta.save();
+
+        res.json({ mensaje: 'Se agregó un nuevo pedido y se registró la venta en el reporte' });
     } catch (error) {
-        console.log(error);
+        console.log("Error detallado al registrar la venta:", error);
         next(error);
     }
 };
@@ -17,7 +36,7 @@ exports.mostrarPedidos = async (req, res, next) => {
             .populate('cliente', '-password')
             .populate({
                 path: 'pedido.producto',
-                select: 'nombre imagen' // Seleccionar los campos de imagen y nombre
+                select: 'nombre imagen'
             });
         res.json(pedidos);
     } catch (error) {
