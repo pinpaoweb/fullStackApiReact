@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 
-// Función asincrónica para conectar a la base de datos MongoDB
 const conectarDB = async () => {
   try {
-    // Lee la variable de entorno de Render/MongoDB Atlas, o usa local si no existe
-    const DB_URI = process.env.MONGO_URI || process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/authdb';
+    // Pega tu cadena de conexión de MongoDB Atlas aquí dentro de las comillas
+    const DB_URI = 'mongodb+srv://pinpao92:<db_password>@cluster0.gupvv.mongodb.net/?appName=Cluster0';
     
     await mongoose.connect(DB_URI, {
       serverSelectionTimeoutMS: 5000,
