@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ProductModal from './ProductModal';
 import LazyLoad from 'react-lazyload';
-import API_URL from '../api';
 
 const ManageProducts = () => {
   const [products, setProducts] = useState([]);
@@ -15,7 +14,7 @@ const ManageProducts = () => {
   // Función para obtener productos
   const fetchProducts = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/productos`);
+      const response = await axios.get('http://localhost:5000/api/productos');
       setProducts(response.data);
     } catch (error) {
       setErrorMessage('Error al obtener los productos');

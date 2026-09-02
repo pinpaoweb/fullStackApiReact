@@ -1,0 +1,58 @@
+Control de Impactos Ambientales
+Minimización de Residuos:
+
+Objetivo: Reducir la cantidad de desechos generados en el proceso productivo.
+Cómo hacerlo: Implementar prácticas como el reciclaje, la reutilización de materiales y la reducción de desperdicios en la producción. Por ejemplo, en el desarrollo de software, esto puede incluir la optimización del código para reducir el consumo de recursos.
+Reducción de Huella de Carbono:
+
+Objetivo: Disminuir las emisiones de gases de efecto invernadero generadas por las actividades empresariales.
+Cómo hacerlo: Adoptar tecnologías eficientes en energía, como servidores y equipos de bajo consumo, y fomentar prácticas sostenibles como el uso de energía renovable. En el contexto del software, esto puede incluir la mejora de la eficiencia de los sistemas para reducir la demanda de energía.
+Control de Accidentes y Enfermedades
+Capacitación:
+
+Objetivo: Asegurar que los empleados conozcan los riesgos y las mejores prácticas para prevenir accidentes y enfermedades.
+Cómo hacerlo: Ofrecer entrenamientos regulares sobre el uso correcto de equipos, procedimientos de seguridad y medidas preventivas. La capacitación puede incluir simulaciones de situaciones de emergencia y técnicas de manejo seguro de equipos.
+Simulacros:
+
+Objetivo: Preparar a los empleados para responder de manera efectiva en caso de emergencia.
+Cómo hacerlo: Realizar ejercicios prácticos y simulaciones de emergencias, como evacuaciones y procedimientos de respuesta a incidentes. Esto ayuda a que los empleados se familiaricen con los protocolos y refuercen sus habilidades en situaciones de alta presión.
+Mejora Continua de Procedimientos:
+
+Objetivo: Mantener y mejorar continuamente las prácticas de seguridad y salud laboral.
+Cómo hacerlo: Revisar y actualizar periódicamente los procedimientos de seguridad y las políticas de salud laboral en función de los incidentes, auditorías y cambios en la normativa. Implementar retroalimentación de los empleados y lecciones aprendidas para ajustar y mejorar las medidas existentes.
+
+
+Presentación sobre las estrategias para la prevención y control de los impactos ambientales, accidentes y enfermedades laborales (ATEL) GA8-220601501-AA2-EV01
+
+
+Mapa mental respecto a los planes y acciones establecidos en medio ambiente y SST GA8-220601501-AA3-EV01Evidencia
+
+
+
+
+Mapa mental respecto a los planes y acciones establecidos en medio ambiente y SST GA8-220601501-AA3-EV01Evidencia 
+
+
+
+
+
+Aprendiz: Pedro Jose Pinzon Alvarez
+
+
+
+
+
+
+Sena
+Análisis Y Desarrollo De Software Ficha De Caracterización (2721543)
+
+
+
+
+
+Docente: Lady Alexandra Salazar Salas
+
+
+
+Santa Marta 13-08-2024
+

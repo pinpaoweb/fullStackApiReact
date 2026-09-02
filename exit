@@ -1,0 +1,11 @@
+[33mec30558[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Resuelvo conflicto en .gitignore
+[33ma1befb6[m Primer commit con token
+[33mbc1eaa3[m inicio del aplicacion
+[33m477b5eb[m reconfiguracion CORS en backend y otros
+[33m627acd6[m correciones generales
+[33m2af93d3[m nueva version Pedidos2
+[33m8bc51c9[m Componente UpdateUser, login, api controller
+[33m843346e[m Gestor Productos
+[33m60a94d8[m Register, Login, Pedido
+[33m5df6932[m Mostrar productos desde la API con REACT
+[33md342985[m alistamiento
