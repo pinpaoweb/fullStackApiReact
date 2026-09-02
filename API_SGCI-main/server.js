@@ -15,7 +15,7 @@ conectarDB();
 
 // 🔥 MIDDLEWARES
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://192.168.1.40:5173'],
+  origin: ['http://localhost:5173', 'http://192.168.1.40:5173','https://react1api.vercel.app'], 
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
