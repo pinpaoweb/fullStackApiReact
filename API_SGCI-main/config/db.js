@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const conectarDB = async () => {
   try {
-    // Pega tu cadena de conexión de MongoDB Atlas aquí dentro de las comillas
-    const DB_URI = 'mongodb+srv://pinpao92:<db_password>@cluster0.gupvv.mongodb.net/?appName=Cluster0';
+    // Esto lee la variable segura que configuraste en Render
+    const DB_URI = process.env.MONGO_URI;
     
     await mongoose.connect(DB_URI, {
       serverSelectionTimeoutMS: 5000,
