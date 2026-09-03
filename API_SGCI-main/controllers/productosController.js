@@ -1,19 +1,14 @@
 const Producto = require('../models/Producto');
 const multer = require('multer');
 const shortid = require('shortid');
-const path = require('path'); // Asegúrate de importar 'path'
+const path = require('path');
 
 // controllers/productosController.js
-
-//const Producto = require('../models/Producto'); // Asegúrate de que la ruta al modelo sea correcta
-
-
-
 
 const configuracionMulter = {
     storage: multer.diskStorage({
         destination: (req, file, cb) => {
-            const uploadsDir = path.join(__dirname, '../uploads'); // Usar path.join para asegurar compatibilidad SO
+            const uploadsDir = path.join(__dirname, '../uploads');
             cb(null, uploadsDir);
         },
         filename: (req, file, cb) => {
@@ -35,11 +30,9 @@ const upload = multer(configuracionMulter).single('imagen');
 exports.subirArchivo = (req, res, next) => {
     upload(req, res, function (error) {
         if (error) {
-            //res.json({ mensaje: error.message });
             return res.status(400).json({ mensaje: error.message });
         }
-       //return next();
-       next();
+        next();
     });
 };
 
@@ -48,7 +41,9 @@ exports.nuevoProducto = async (req, res, next) => {
 
     try {
         if (req.file) {
-            producto.imagen = req.file.filename;
+            // Guardamos la URL absoluta utilizando HOST_URL de las variables de entorno
+            const host = process.env.HOST_URL || `http://localhost:${process.env.PORT || 5000}`;
+            producto.imagen = `${host}/uploads/${req.file.filename}`;
         }
         await producto.save();
         res.json({ mensaje: 'Se agregó un nuevo producto' });
@@ -84,7 +79,6 @@ exports.mostrarProducto = async (req, res, next) => {
     }
 };
 
-
 exports.actualizarProducto = async (req, res, next) => {
     try {
         const { idProducto } = req.params;
@@ -94,8 +88,10 @@ exports.actualizarProducto = async (req, res, next) => {
             return res.status(400).json({ error: 'Nombre y precio del producto son requeridos' });
         }
 
+        const host = process.env.HOST_URL || `http://localhost:${process.env.PORT || 5000}`;
+
         if (req.file) {
-            nuevoProducto.imagen = req.file.filename;
+            nuevoProducto.imagen = `${host}/uploads/${req.file.filename}`;
         } else {
             const productoAnterior = await Producto.findById(idProducto);
             if (!productoAnterior) {
@@ -138,14 +134,13 @@ exports.buscarProducto = async (req, res, next) => {
         console.log(error);
         next();
     }
-
 };
-// En productosController.js
+
 exports.getAllProducts = async (req, res) => {
     try {
-      const productos = await Producto.find(); // Asegúrate de que esta línea sea correcta
-      res.json(productos);
+        const productos = await Producto.find();
+        res.json(productos);
     } catch (error) {
-      res.status(500).json({ error: 'Error al obtener los productos' });
+        res.status(500).json({ error: 'Error al obtener los productos' });
     }
-  };
+};
