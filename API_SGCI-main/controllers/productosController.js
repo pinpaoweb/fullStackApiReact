@@ -1,19 +1,15 @@
 const Producto = require('../models/Producto');
 const multer = require('multer');
 const shortid = require('shortid');
-const path = require('path'); // Asegúrate de importar 'path'
+const path = require('path');
 
-// controllers/productosController.js
-
-//const Producto = require('../models/Producto'); // Asegúrate de que la ruta al modelo sea correcta
-
-
-
+// Detecta automáticamente si estás en producción (Render) o en local
+const HOST_URL = process.env.BACKEND_URL || 'http://localhost:5000';
 
 const configuracionMulter = {
     storage: multer.diskStorage({
         destination: (req, file, cb) => {
-            const uploadsDir = path.join(__dirname, '../uploads'); // Usar path.join para asegurar compatibilidad SO
+            const uploadsDir = path.join(__dirname, '../uploads');
             cb(null, uploadsDir);
         },
         filename: (req, file, cb) => {
@@ -35,11 +31,9 @@ const upload = multer(configuracionMulter).single('imagen');
 exports.subirArchivo = (req, res, next) => {
     upload(req, res, function (error) {
         if (error) {
-            //res.json({ mensaje: error.message });
             return res.status(400).json({ mensaje: error.message });
         }
-       //return next();
-       next();
+        next();
     });
 };
 
@@ -61,7 +55,14 @@ exports.nuevoProducto = async (req, res, next) => {
 exports.mostrarProductos = async (req, res, next) => {
     try {
         const productos = await Producto.find({});
-        res.json(productos);
+        const productosConUrl = productos.map(producto => {
+            const prod = producto.toObject();
+            if (prod.imagen && !prod.imagen.startsWith('http')) {
+                prod.imagen = `${HOST_URL}/uploads/${prod.imagen}`;
+            }
+            return prod;
+        });
+        res.json(productosConUrl);
     } catch (error) {
         console.log(error);
         next();
@@ -77,13 +78,17 @@ exports.mostrarProducto = async (req, res, next) => {
             return next();
         }
 
-        res.json(producto);
+        const prod = producto.toObject();
+        if (prod.imagen && !prod.imagen.startsWith('http')) {
+            prod.imagen = `${HOST_URL}/uploads/${prod.imagen}`;
+        }
+
+        res.json(prod);
     } catch (error) {
         console.log('Error al buscar el producto:', error);
         next();
     }
 };
-
 
 exports.actualizarProducto = async (req, res, next) => {
     try {
@@ -112,7 +117,12 @@ exports.actualizarProducto = async (req, res, next) => {
             return res.status(404).json({ error: 'Producto no encontrado' });
         }
 
-        res.json(producto);
+        const prod = producto.toObject();
+        if (prod.imagen && !prod.imagen.startsWith('http')) {
+            prod.imagen = `${HOST_URL}/uploads/${prod.imagen}`;
+        }
+
+        res.json(prod);
     } catch (error) {
         console.error('Error al actualizar el producto:', error);
         res.status(500).json({ error: 'Error al actualizar el producto' });
@@ -132,20 +142,33 @@ exports.eliminarProducto = async (req, res, next) => {
 exports.buscarProducto = async (req, res, next) => {
     try {
         const { query } = req.params;
-        const producto = await Producto.find({ nombre: new RegExp(query, 'i') });
-        res.json(producto);
+        const productos = await Producto.find({ nombre: new RegExp(query, 'i') });
+        const productosConUrl = productos.map(producto => {
+            const prod = producto.toObject();
+            if (prod.imagen && !prod.imagen.startsWith('http')) {
+                prod.imagen = `${HOST_URL}/uploads/${prod.imagen}`;
+            }
+            return prod;
+        });
+        res.json(productosConUrl);
     } catch (error) {
         console.log(error);
         next();
     }
-
 };
-// En productosController.js
+
 exports.getAllProducts = async (req, res) => {
     try {
-      const productos = await Producto.find(); // Asegúrate de que esta línea sea correcta
-      res.json(productos);
+        const productos = await Producto.find();
+        const productosConUrl = productos.map(producto => {
+            const prod = producto.toObject();
+            if (prod.imagen && !prod.imagen.startsWith('http')) {
+                prod.imagen = `${HOST_URL}/uploads/${prod.imagen}`;
+            }
+            return prod;
+        });
+        res.json(productosConUrl);
     } catch (error) {
-      res.status(500).json({ error: 'Error al obtener los productos' });
+        res.status(500).json({ error: 'Error al obtener los productos' });
     }
-  };
+};
