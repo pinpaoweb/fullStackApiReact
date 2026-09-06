@@ -10,7 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "cookie-parser": "^1.4.6",
+    "cookie-parser": "^1.4.7",
     "express-validator": "^7.1.0",
     "glob": "^11.0.0",
     "prop-types": "^15.8.1",

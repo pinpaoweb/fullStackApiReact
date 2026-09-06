@@ -11,6 +11,9 @@ const bodyParser = require('body-parser');
 // Crear una instancia de Express
 const app = express();
 
+// IMPORTANTE para Render (cookies seguras detrás de un proxy)
+app.set('trust proxy', 1);
+
 // Conectar a la base de datos
 conectarDB().catch((err) => {
     console.error('Error al conectar a la base de datos:', err);
@@ -21,7 +24,7 @@ const corsOptions = {
     origin: [
         'http://127.0.0.1:5173', 
         'http://localhost:5173', 
-        'https://react1api.vercel.app' // <--- Agregado tu dominio de Vercel
+        'https://react1api.vercel.app'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
