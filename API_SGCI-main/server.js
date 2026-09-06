@@ -19,13 +19,21 @@ conectarDB().catch((err) => {
     console.error('Error al conectar a la base de datos:', err);
 });
 
-// Configuración de CORS (Incluyendo tu frontend de Vercel)
+// Configuración de CORS dinámica para Vercel y Localhost
+const allowedOrigins = [
+    'http://127.0.0.1:5173', 
+    'http://localhost:5173', 
+    'https://react1api.vercel.app'
+];
+
 const corsOptions = {
-    origin: [
-        'http://127.0.0.1:5173', 
-        'http://localhost:5173', 
-        'https://react1api.vercel.app'
-    ],
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.vercel.app')) {
+            callback(null, true);
+        } else {
+            callback(new Error('Bloqueado por la política CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
