@@ -16,9 +16,13 @@ conectarDB().catch((err) => {
     console.error('Error al conectar a la base de datos:', err);
 });
 
-// Configuración de CORS
+// Configuración de CORS (Incluyendo tu frontend de Vercel)
 const corsOptions = {
-    origin: ['http://127.0.0.1:5173', 'http://localhost:5173'], // Permitir ambos orígenes
+    origin: [
+        'http://127.0.0.1:5173', 
+        'http://localhost:5173', 
+        'https://react1api.vercel.app' // <--- Agregado tu dominio de Vercel
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
@@ -27,8 +31,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Middleware para analizar el cuerpo de las solicitudes
-app.use(bodyParser.json()); // Para parsear JSON en el cuerpo de las solicitudes
-app.use(cookieParser()); // Para analizar cookies
+app.use(bodyParser.json()); 
+app.use(cookieParser()); 
 
 // Ruta para servir archivos estáticos
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -38,10 +42,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/productos', productosRoutes);
 app.use('/api/', pedidosRoutes);
 
-// Ruta para el inicio de sesión (ejemplo con cookies)
+// Ruta para el inicio de sesión
 app.post('/login', (req, res) => {
-    // Aquí deberías tener tu lógica de autenticación
-    // Establecer una cookie de autenticación
     res.cookie('token', 'valor_del_token', {
         maxAge: 3600000,
         httpOnly: true,
@@ -51,8 +53,8 @@ app.post('/login', (req, res) => {
     res.json({ message: 'Inicio de sesión exitoso' });
 });
 
-// Configurar el puerto en el que escuchará el servidor
-const PORT = 5000;
+// Configurar el puerto dinámico para Render o local por defecto
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
