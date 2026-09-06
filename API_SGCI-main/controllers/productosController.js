@@ -25,15 +25,16 @@ const configuracionMulter = {
 
 const upload = multer(configuracionMulter).single('imagen');
 
-// Función auxiliar para corregir la URL de la imagen dinámicamente
+// Función auxiliar robusta para corregir la URL de la imagen dinámicamente
 const corregirUrlImagen = (imagen) => {
     if (!imagen) return imagen;
     const host = process.env.HOST_URL || 'https://apireact1-1.onrender.com';
     
-    // Si la imagen viene con localhost, lo reemplazamos por el HOST_URL de Render
-    if (imagen.includes('localhost:5000')) {
-        return imagen.replace(/http:\/\/localhost:5000/g, host);
+    // Si la imagen viene con localhost o 127.0.0.1, lo reemplazamos por el HOST_URL de Render
+    if (imagen.includes('localhost') || imagen.includes('127.0.0.1') || imagen.includes(':5000')) {
+        return imagen.replace(/https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?/g, host);
     }
+    
     // Si es solo el nombre del archivo o una ruta relativa, le anteponemos el host
     if (!imagen.startsWith('http')) {
         const rutaLimpia = imagen.startsWith('/') ? imagen : `/uploads/${imagen}`;
@@ -70,7 +71,6 @@ exports.nuevoProducto = async (req, res, next) => {
 exports.mostrarProductos = async (req, res, next) => {
     try {
         const productos = await Producto.find({});
-        // Corregimos las URLs de las imágenes de todos los productos sobre la marcha
         const productosCorregidos = productos.map(prod => {
             const prodObj = prod.toObject();
             prodObj.imagen = corregirUrlImagen(prodObj.imagen);
