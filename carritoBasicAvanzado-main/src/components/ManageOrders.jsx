@@ -15,7 +15,7 @@ const ManageOrders = () => {
     const fetchOrders = async () => {
       try {
         // Realiza una solicitud GET a la API para obtener los pedidos
-        const response = await axios.get('http://localhost:5000/api/pedidos', { withCredentials: true });
+        const response = await axios.get('https://apireact1-1.onrender.com/api/pedidos', { withCredentials: true });
         // Ordena los pedidos por fecha de creación en orden descendente
         const sortedOrders = response.data
           .filter(order => order.cliente && order.estado) // Filtra pedidos sin cliente o estado

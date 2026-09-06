@@ -7,7 +7,7 @@ function ProductPage({ productId }) {
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    axios.get(`${API_URL}/api/products/${productId}`)
+    axios.get(`${API_URL}/api/products/${productId}`, { withCredentials: true })
       .then(response => {
         setProduct(response.data);
       })

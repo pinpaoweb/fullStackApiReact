@@ -16,7 +16,7 @@ const ManageProducts = () => {
   // Función para obtener productos
   const fetchProducts = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/productos`);
+      const response = await axios.get(`${API_URL}/api/productos`, { withCredentials: true });
       setProducts(response.data);
     } catch (error) {
       setErrorMessage('Error al obtener los productos');
@@ -30,7 +30,7 @@ const ManageProducts = () => {
   // Función para eliminar producto
   const handleDeleteProduct = async (id) => {
     try {
-      const response = await axios.delete(`${API_URL}/api/productos/${id}`);
+      const response = await axios.delete(`${API_URL}/api/productos/${id}`, { withCredentials: true });
       fetchProducts();
       setSuccessMessage(response.data.mensaje || 'Producto eliminado con éxito');
       setTimeout(() => setSuccessMessage(''), 1000);
@@ -55,7 +55,7 @@ const ManageProducts = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get(`${API_URL}/api/productos/busqueda/${searchQuery}`);
+      const response = await axios.get(`${API_URL}/api/productos/busqueda/${searchQuery}`, { withCredentials: true });
       setProducts(response.data);
       if (response.data.length === 0) {
         setErrorMessage('No se encontraron productos');

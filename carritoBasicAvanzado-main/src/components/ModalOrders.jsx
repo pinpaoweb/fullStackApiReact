@@ -15,7 +15,7 @@ const ModalOrders = ({
 
   const handleUpdateOrder = async (updatedOrder) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/pedidos/${updatedOrder._id}`, updatedOrder);
+      const response = await axios.put(`https://apireact1-1.onrender.com/api/pedidos/${updatedOrder._id}`, updatedOrder, { withCredentials: true });
       setOrders(orders.map(o => (o._id === updatedOrder._id ? response.data : o)));
       setFilteredOrders(filteredOrders.map(o => (o._id === updatedOrder._id ? response.data : o)));
       setSelectedOrder(null);
@@ -30,7 +30,7 @@ const ModalOrders = ({
 
   const handleDeleteOrder = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/pedidos/${orderToDelete}`);
+      await axios.delete(`https://apireact1-1.onrender.com/api/pedidos/${orderToDelete}`, { withCredentials: true });
       setOrders(orders.filter(o => o._id !== orderToDelete));
       setFilteredOrders(filteredOrders.filter(o => o._id !== orderToDelete));
       setOrderToDelete(null);

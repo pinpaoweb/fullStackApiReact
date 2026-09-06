@@ -40,7 +40,7 @@ const InvoiceForm = ({ cartItems }) => {
   }
   
   try {
-      await axios.post('http://localhost:5000/api/pedidos/nuevo', pedido);
+      await axios.post('https://apireact1-1.onrender.com/api/pedidos/nuevo', pedido, { withCredentials: true });
       navigate('/invoice-pdf', { state: { ...formData, cartItems, paymentCode } });
       alert('Pedido enviado correctamente'); // Notificar al usuario
   } catch (error) {

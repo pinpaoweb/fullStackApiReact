@@ -71,12 +71,13 @@ const UpdateUser = () => {
 
       // Realiza la petición de actualización al servidor.
       const response = await axios.put(
-        'http://localhost:5000/api/auth/update',
+        'https://apireact1-1.onrender.com/api/auth/update',
         updatedUser,
         {
           headers: {
             Authorization: `Bearer ${token}`
-          }
+          },
+          withCredentials: true
         }
       );
 

@@ -22,7 +22,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/auth/register', formData, {
+      await axios.post('https://apireact1-1.onrender.com/api/auth/register', formData, {
         withCredentials: true // Asegúrate de incluir cookies en solicitudes cruzadas
       });
       setMessage('Registro exitoso');

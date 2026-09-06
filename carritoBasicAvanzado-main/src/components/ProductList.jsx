@@ -1,46 +1,57 @@
-import React, { useEffect, useState } from 'react'; // Import useState for loading state
+import React, { useEffect, useState } from 'react';
 import Product from './Product';
 
-const ProductList = ({ products, onAddToCart, loading, error }) => {
-  // Add loading and error states
+const ProductList = ({ products: externalProducts, onAddToCart, loading, error }) => {
+  // Estados locales para respaldar si no se pasan props externas
+  const [internalProducts, setInternalProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [productListError, setProductListError] = useState(null);
 
-  // Handle potential errors during data fetching (optional)
+  // Efecto para obtener los datos si no vienen por props, apuntando a tu API real en Render
   useEffect(() => {
     const fetchData = async () => {
+      // Si ya hay productos externos, no hacemos la llamada duplicada
+      if (externalProducts && externalProducts.length > 0) return;
+
       setIsLoading(true);
       try {
-        // Simulate API call or data fetching logic
-        const response = await fetch('https://your-api.com/products');
+        const response = await fetch('https://apireact1-1.onrender.com/api/productos');
+        if (!response.ok) {
+          throw new Error('Error al obtener los productos desde el servidor');
+        }
         const data = await response.json();
-        setProducts(data); // Update products if data fetching is successful
-      } catch (error) {
-        setProductListError(error.message); // Set error message if fetching fails
+        setInternalProducts(data);
+      } catch (err) {
+        setProductListError(err.message);
       } finally {
         setIsLoading(false);
       }
     };
 
-    if (!products) { // Fetch data if products are not provided
-      fetchData();
-    }
-  }, [products]); // Update effect only when products change
+    fetchData();
+  }, [externalProducts]);
 
-  // Render based on loading, error, or product list
-  if (isLoading) {
+  // Usar los productos externos si existen, de lo contrario usar los internos
+  const currentProducts = externalProducts && externalProducts.length > 0 ? externalProducts : internalProducts;
+
+  // Renderizado según los estados de carga o error
+  if (loading || isLoading) {
     return <p>Cargando productos...</p>;
   }
 
-  if (productListError) {
-    return <p>Error al cargar productos: {productListError}</p>;
+  if (error || productListError) {
+    return <p>Error al cargar productos: {error || productListError}</p>;
   }
 
   return (
     <div className="product-list">
-      {products.map(product => (
-        <Product key={product.id} product={product} onAddToCart={onAddToCart} />
-      ))}
+      {currentProducts && currentProducts.length > 0 ? (
+        currentProducts.map(product => (
+          <Product key={product._id || product.id} product={product} onAddToCart={onAddToCart} />
+        ))
+      ) : (
+        <p>No hay productos disponibles.</p>
+      )}
     </div>
   );
 };
