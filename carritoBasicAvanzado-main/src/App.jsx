@@ -10,17 +10,19 @@ import InvoicePDF from './components/InvoicePDF';
 import axios from 'axios';
 import Register from './components/Register';
 import Login from './components/Login';
-import ManageProducts from './components/ManageProducts'; // Asegúrate de la ruta correcta
+import ManageProducts from './components/ManageProducts';
 import Pedidos from './components/Pedidos';
 import ManageOrders from './components/ManageOrders';
 import UpdateUser from './components/UpdateUser';
+
+const API_URL = 'https://apireact1-1.onrender.com';
 
 const initialProducts = [];
 const initialSalesData = [];
 
 const logout = async () => {
   try {
-    await axios.post('http://localhost:5000/api/logout');
+    await axios.post(`${API_URL}/api/logout`);
     localStorage.removeItem('token');
     window.location.href = '/login';
   } catch (error) {
@@ -37,7 +39,6 @@ const mapProductData = (product) => {
   };
 };
 
-
 const App = () => {
   const [products, setProducts] = useState(initialProducts);
   const [salesData] = useState(initialSalesData);
@@ -50,7 +51,7 @@ const App = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/productos', { withCredentials: true });
+        const response = await axios.get(`${API_URL}/api/productos`, { withCredentials: true });
         const mappedProducts = response.data.map(mapProductData);
         setProducts(mappedProducts);
       } catch (error) {

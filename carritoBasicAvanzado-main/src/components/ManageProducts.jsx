@@ -3,6 +3,8 @@ import axios from 'axios';
 import ProductModal from './ProductModal';
 import LazyLoad from 'react-lazyload';
 
+const API_URL = 'https://apireact1-1.onrender.com';
+
 const ManageProducts = () => {
   const [products, setProducts] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -14,7 +16,7 @@ const ManageProducts = () => {
   // Función para obtener productos
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/productos');
+      const response = await axios.get(`${API_URL}/api/productos`);
       setProducts(response.data);
     } catch (error) {
       setErrorMessage('Error al obtener los productos');
@@ -28,7 +30,7 @@ const ManageProducts = () => {
   // Función para eliminar producto
   const handleDeleteProduct = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/productos/${id}`);
+      const response = await axios.delete(`${API_URL}/api/productos/${id}`);
       fetchProducts();
       setSuccessMessage(response.data.mensaje || 'Producto eliminado con éxito');
       setTimeout(() => setSuccessMessage(''), 1000);
@@ -53,7 +55,7 @@ const ManageProducts = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get(`http://localhost:5000/api/productos/busqueda/${searchQuery}`);
+      const response = await axios.get(`${API_URL}/api/productos/busqueda/${searchQuery}`);
       setProducts(response.data);
       if (response.data.length === 0) {
         setErrorMessage('No se encontraron productos');
@@ -100,12 +102,15 @@ const ManageProducts = () => {
                 {product.imagen && (
                   <LazyLoad height={100} offset={100}>
                     <img
-                      src={`http://localhost:5000/uploads/${product.imagen}`}
-                      
+                      src={
+                        product.imagen.startsWith('http')
+                          ? product.imagen.replace('http://localhost:5000', API_URL)
+                          : `${API_URL}/uploads/${product.imagen}`
+                      }
                       alt={`Imagen de ${product.nombre}`}
                       width="100"
                       onError={(e) => {
-                        e.target.src = '/images/no-image.png'; // Imagen de reemplazo
+                        e.target.src = '/images/no-image.png';
                       }}
                     />
                   </LazyLoad>

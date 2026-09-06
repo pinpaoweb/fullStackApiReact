@@ -1,10 +1,13 @@
-import React, {  useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+
+const API_URL = 'https://apireact1-1.onrender.com';
+
 function ProductPage({ productId }) {
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    axios.get(`/api/products/${productId}`)
+    axios.get(`${API_URL}/api/products/${productId}`)
       .then(response => {
         setProduct(response.data);
       })
@@ -23,10 +26,16 @@ function ProductPage({ productId }) {
     </div>
   );
 }
+
 const Product = ({ product, onAddToCart }) => {
   const [quantity, setQuantity] = useState(1);
  
-  const imageURL = `http://localhost:5000/uploads/${product.imagen}`;
+  const imageURL = product.imagen 
+    ? (product.imagen.startsWith('http') 
+        ? product.imagen.replace('http://localhost:5000', API_URL) 
+        : `${API_URL}/uploads/${product.imagen}`)
+    : '/images/no-image.png';
+
   return (
     <div className="product">
       <img src={imageURL} alt={product.name} />

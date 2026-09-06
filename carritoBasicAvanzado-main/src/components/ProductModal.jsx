@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const API_URL = 'https://apireact1-1.onrender.com';
+
 const ProductModal = ({ showModal, closeModal, fetchProducts, productToEdit }) => {
   const initialProductData = {
     nombre: '',
@@ -50,18 +52,20 @@ const ProductModal = ({ showModal, closeModal, fetchProducts, productToEdit }) =
     formData.append('descripcion', productData.descripcion);
     formData.append('precio', productData.precio);
     formData.append('stock', productData.stock);
-    formData.append('imagen', productData.imagen);
+    if (productData.imagen) {
+      formData.append('imagen', productData.imagen);
+    }
 
     try {
       let response;
       if (productToEdit) {
-        response = await axios.put(`http://localhost:5000/api/productos/${productToEdit._id}`, formData, {
+        response = await axios.put(`${API_URL}/api/productos/${productToEdit._id}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         });
       } else {
-        response = await axios.post('http://localhost:5000/api/productos', formData, {
+        response = await axios.post(`${API_URL}/api/productos`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }

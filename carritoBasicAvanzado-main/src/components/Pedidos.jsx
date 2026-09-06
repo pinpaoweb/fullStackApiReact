@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+const API_URL = 'https://apireact1-1.onrender.com';
+
 const Pedidos = () => {
   const [pedidos, setPedidos] = useState([]);
   const userId = localStorage.getItem('userId');
@@ -8,8 +10,7 @@ const Pedidos = () => {
   useEffect(() => {
     const fetchPedidos = async () => {
       try {
-        // Asegúrate de incluir las credenciales si es necesario
-        const response = await axios.get(`http://localhost:5000/api/pedidos/cliente/${userId}`, { withCredentials: true });
+        const response = await axios.get(`${API_URL}/api/pedidos/cliente/${userId}`, { withCredentials: true });
         const sortedPedidos = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setPedidos(sortedPedidos);
       } catch (error) {
@@ -36,20 +37,28 @@ const Pedidos = () => {
             </div>
             <div className="pedido-body">
               <h3>Productos</h3>
-              {pedido.pedido.map(item => (
-                <div key={item._id} className="pedido-item">
-                  <img 
-                    src={item.producto?.imagen ? `http://localhost:5000/uploads/${item.producto.imagen}` : 'default-image.png'} 
-                    alt={item.producto?.nombre || 'Imagen no disponible'} 
-                    className="product-image" 
-                  />
-                  <div className="item-details">
-                    <p><strong>Producto:</strong> {item.producto?.nombre || 'Producto eliminado'}</p>
-                    <p><strong>Cantidad:</strong> {item.cantidad}</p>
-                    <p><strong>Precio:</strong> ${item.producto?.precio ? item.producto.precio.toFixed(2) : 'N/A'}</p>
+              {pedido.pedido.map(item => {
+                const imgUrl = item.producto?.imagen
+                  ? (item.producto.imagen.startsWith('http')
+                      ? item.producto.imagen.replace('http://localhost:5000', API_URL)
+                      : `${API_URL}/uploads/${item.producto.imagen}`)
+                  : 'default-image.png';
+
+                return (
+                  <div key={item._id} className="pedido-item">
+                    <img 
+                      src={imgUrl} 
+                      alt={item.producto?.nombre || 'Imagen no disponible'} 
+                      className="product-image" 
+                    />
+                    <div className="item-details">
+                      <p><strong>Producto:</strong> {item.producto?.nombre || 'Producto eliminado'}</p>
+                      <p><strong>Cantidad:</strong> {item.cantidad}</p>
+                      <p><strong>Precio:</strong> ${item.producto?.precio ? item.producto.precio.toFixed(2) : 'N/A'}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             <div className="pedido-footer">
               <h3>Información de Envío</h3>
