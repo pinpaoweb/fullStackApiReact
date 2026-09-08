@@ -23,22 +23,24 @@ conectarDB().catch((err) => {
 const allowedOrigins = [
     'http://127.0.0.1:5173', 
     'http://localhost:5173', 
-    'https://react1api.vercel.app'
+    'https://react1api.vercel.app' // Asegúrate de que esta sea tu URL exacta de Vercel
 ];
 
 const corsOptions = {
     origin: function (origin, callback) {
+        // Permitir solicitudes sin origen (como Postman o apps móviles) 
+        // o si el origen está en la lista o termina en vercel.app
         if (!origin || allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.vercel.app')) {
             callback(null, true);
         } else {
             callback(new Error('Bloqueado por la política CORS'));
         }
     },
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
+    credentials: true,
+    optionsSuccessStatus: 200 // Soluciona problemas de compatibilidad con navegadores antiguos en peticiones OPTIONS
 };
 
+// Aplicar CORS antes de cualquier ruta
 app.use(cors(corsOptions));
 
 // Middleware para analizar el cuerpo de las solicitudes
